@@ -28,7 +28,7 @@ async function setupServicesTable(pool: any) {
     `);
 
     // Check if services already exist
-    const [existing] = await pool.execute<any[]>('SELECT COUNT(*) as count FROM services');
+    const [existing] = await pool.execute('SELECT COUNT(*) as count FROM services') as any[];
     
     if (existing[0].count === 0) {
       console.log('Inserting default services...');
@@ -138,10 +138,10 @@ async function migrateJsonToMySQL() {
     for (const blog of jsonData) {
       try {
         // Check if blog already exists
-        const [existing] = await pool.execute<any[]>(
+        const [existing] = await pool.execute(
           'SELECT id FROM blogs WHERE id = ? OR slug = ?',
           [blog.id, blog.slug]
-        );
+        ) as any[];
 
         if (existing && existing.length > 0) {
           console.log(`Skipping blog "${blog.title}" - already exists`);
