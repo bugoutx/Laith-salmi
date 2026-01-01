@@ -1,0 +1,264 @@
+'use client';
+
+import { motion, useInView } from 'framer-motion';
+import { useRef, useState } from 'react';
+
+export default function ServicesSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const [expandedCard, setExpandedCard] = useState<string | null>(null);
+
+  const services = [
+    {
+      id: 'technical-skills',
+      number: '01',
+      title: 'مهارة التحليل الفني',
+      subtitle: 'بناء المسار المهني',
+      description: 'أقدّم لك مهارة التحليل الفني من أساسها الصحيح، لتصبح قادرًا على قراءة السوق والفرص بنفسك، وبناء قراراتك بوضوح، بعيدًا عن الإزعاج وتضارب الآراء الخارجية.',
+      value: 'امتلاك أداة فكرية ومهارية يمكنك البناء عليها كمسار طويل المدى في الأسواق المالية.'
+    },
+    {
+      id: 'metals-methodology',
+      number: '02', 
+      title: 'منهجية تأهيل تاجر المعادن',
+      subtitle: 'نهج متكامل ومتخصص',
+      description: 'أعمل على نقل خبرتي العملية في أسواق المعادن، وتحويلها إلى منهجية متكاملة لتأهيلك كتاجر معادن، من فهم حركة أسعار المعادن، وإدارة المخاطر، وصولًا إلى كيفية اتخاذ القرار بثبات وهدوء.',
+      value: 'منهج واضح ومتكامل، لا يحتاج بعده إلى تعدد أساليب أو مصادر، بل يركّز على التطبيق الواعي والاستمرارية.'
+    },
+    {
+      id: 'mentoring',
+      number: '03',
+      title: 'التوجيه والمتابعة المباشرة',
+      subtitle: 'حتى الوصول للهدف',
+      description: 'أقدّم حصص تقوية مباشرة تُبنى على احتياجك الفعلي، نُعالج فيها نقاط الضعف، ونُعزّز الجوانب التي تحتاجها في مرحلتك الحالية، مع إمكانية المتابعة المباشرة بعد الجلسات حتى الوصول إلى هدفك.',
+      value: 'أنت لا تُترك بعد الجلسة، بل تُوجَّه حتى يتحقق الفهم والتطبيق العملي.'
+    },
+    {
+      id: 'investor-partnership',
+      number: '04',
+      title: 'شراكة واعية مع المستثمر',
+      subtitle: 'عقلية استثمارية مستدامة',
+      description: 'للمستثمرين، أقدّم متابعة مباشرة مبنية على شرح مبسّط لما يقدّمه السوق من أدلة، وما يمكن أن يترتب عليها من سيناريوهات محتملة، بعيدًا عن ردّات الفعل والقرارات العشوائية.',
+      value: 'تعامل احترافي مع السوق بعقلية استثمارية هادئة ومستدامة.'
+    }
+  ];
+
+  return (
+    <section 
+      ref={sectionRef}
+      className="relative w-full py-12 lg:py-16 overflow-hidden"
+    >
+      {/* Background with animated elements */}
+      <div className="absolute inset-0 bg-gradient-radial from-zinc-900 via-zinc-950 to-black">
+        {/* Floating geometric shapes */}
+        <motion.div
+          className="absolute top-20 left-10 w-32 h-32 border border-green-500/10 rounded-full"
+          animate={{
+            rotate: [0, 360],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+        <motion.div
+          className="absolute bottom-32 right-16 w-24 h-24 border border-green-500/5 rotate-45"
+          animate={{
+            rotate: [45, 405],
+            y: [-10, 10, -10],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+      </div>
+
+      {/* Content container */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8">
+        
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+          className="text-center mb-12"
+        >
+          {/* Eyebrow with animated line */}
+          <motion.div
+            initial={{ opacity: 0, width: 0 }}
+            animate={isInView ? { opacity: 1, width: '100px' } : { opacity: 0, width: 0 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="flex items-center justify-center mb-6"
+          >
+            <div className="h-px bg-gradient-to-r from-transparent via-green-500 to-transparent w-full max-w-[100px]" />
+          </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="text-sm font-medium tracking-wide text-zinc-400 uppercase mb-6"
+          >
+            الخدمات المتخصصة
+          </motion.p>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-50 mb-6"
+            dir="rtl"
+          >
+            ما هي القيمة الحقيقية التي أقدّمها لك؟
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="text-lg text-zinc-400 max-w-3xl mx-auto leading-relaxed"
+            dir="rtl"
+          >
+            أربع خدمات أساسية مصممة لبناء مهاراتك وتطوير فهمك العميق لأسواق المعادن
+          </motion.p>
+        </motion.div>
+
+        {/* Services Grid - Compact Design */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
+          {services.map((service, index) => (
+            <motion.div
+              key={service.id}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ 
+                duration: 0.6, 
+                delay: 0.6 + (index * 0.1),
+                ease: [0.25, 0.1, 0.25, 1]
+              }}
+              className="group relative"
+              onMouseEnter={() => setHoveredCard(service.id)}
+              onMouseLeave={() => setHoveredCard(null)}
+            >
+              {/* Compact Card */}
+              <motion.div
+                className="relative h-full p-5 rounded-2xl bg-zinc-900/50 backdrop-blur-sm border border-zinc-800/50 overflow-hidden"
+                animate={{
+                  borderColor: hoveredCard === service.id ? 'rgba(34, 197, 94, 0.4)' : 'rgba(39, 39, 42, 0.5)',
+                  y: hoveredCard === service.id ? -4 : 0,
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                
+                {/* Top accent bar */}
+                <motion.div
+                  className="absolute top-0 left-0 right-0 h-1 bg-green-500"
+                  initial={{ scaleX: 0 }}
+                  animate={{
+                    scaleX: hoveredCard === service.id ? 1 : 0.3,
+                  }}
+                  transition={{ duration: 0.4 }}
+                  style={{ transformOrigin: 'right' }}
+                />
+
+                {/* Content */}
+                <div className="relative z-10 text-right space-y-4" dir="rtl">
+                  
+                  {/* Number */}
+                  <div className="flex items-center justify-between">
+                    <motion.div
+                      className="w-10 h-10 bg-green-500/15 rounded-lg flex items-center justify-center"
+                      animate={{
+                        backgroundColor: hoveredCard === service.id ? 'rgba(34, 197, 94, 0.25)' : 'rgba(34, 197, 94, 0.15)',
+                      }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <span className="text-lg font-bold text-green-400">{service.number}</span>
+                    </motion.div>
+                    
+                    {/* Status indicator */}
+                    <motion.div
+                      className="w-2 h-2 rounded-full bg-green-500"
+                      animate={{
+                        scale: hoveredCard === service.id ? [1, 1.3, 1] : 1,
+                        opacity: hoveredCard === service.id ? [1, 0.5, 1] : 0.5,
+                      }}
+                      transition={{ duration: 1, repeat: hoveredCard === service.id ? Infinity : 0 }}
+                    />
+                  </div>
+
+                  {/* Title */}
+                  <div>
+                    <motion.h3
+                      className="text-lg font-bold text-zinc-50 mb-1.5 leading-tight"
+                      animate={{
+                        color: hoveredCard === service.id ? '#4ade80' : '#fafafa',
+                      }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {service.title}
+                    </motion.h3>
+                    <p className="text-xs text-green-500/80 font-medium">
+                      {service.subtitle}
+                    </p>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="h-px bg-zinc-800" />
+
+                  {/* Description - Truncated */}
+                  <p className="text-sm text-zinc-400 leading-relaxed line-clamp-3">
+                    {service.description}
+                  </p>
+
+                  {/* Value tag */}
+                  <div className="pt-2">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-zinc-800/50 rounded-lg border border-zinc-700/50">
+                      <div className="w-1.5 h-1.5 bg-green-400 rounded-full" />
+                      <span className="text-xs text-zinc-400">قيمة مضافة</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Hover overlay */}
+                <motion.div
+                  className="absolute inset-0 bg-green-500/5 pointer-events-none"
+                  animate={{
+                    opacity: hoveredCard === service.id ? 1 : 0,
+                  }}
+                  transition={{ duration: 0.3 }}
+                />
+              </motion.div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Bottom CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.8, delay: 1.4 }}
+          className="text-center mt-12"
+        >
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-12 py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-green-500/25 relative overflow-hidden"
+          >
+            <motion.div
+              className="absolute inset-0 bg-white/20"
+              initial={{ x: '-100%' }}
+              whileHover={{ x: '100%' }}
+              transition={{ duration: 0.6 }}
+            />
+            <span className="relative z-10">ابدأ رحلتك معي</span>
+          </motion.button>
+        </motion.div>
+      </div>
+    </section>
+  );
+}

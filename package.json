@@ -6,9 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "setup-db": "tsx scripts/setup-db.ts",
+    "setup-services": "mysql -u root -p < lib/db-services.sql",
+    "migrate": "tsx scripts/migrate-json-to-mysql.ts"
   },
   "dependencies": {
+    "framer-motion": "^12.23.26",
+    "mysql2": "^3.11.5",
     "next": "16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3"
@@ -21,6 +26,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "tailwindcss": "^4",
+    "tsx": "^4.19.2",
     "typescript": "^5"
   }
 }
