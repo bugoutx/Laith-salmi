@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPool } from '@/lib/db';
+import { prisma } from '@/lib/db';
 
 export async function GET() {
   try {
-    const pool = getPool();
-    const [rows] = await pool.execute<any[]>(
-      'SELECT * FROM blogs ORDER BY date DESC, created_at DESC'
-    );
-    return NextResponse.json(rows);
+    const blogs = await prisma.blog.findMany({
+      orderBy: [
+        { date: 'desc' },
+        { createdAt: 'desc' }
+      ]
+    });
+    return NextResponse.json(blogs);
   } catch (error) {
     console.error('Error fetching blogs:', error);
     return NextResponse.json(
@@ -20,32 +22,28 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const blog = await request.json();
-    const pool = getPool();
     
     const id = blog.id || Date.now().toString();
     const slug = blog.slug || blog.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\u0621-\u064A\w-]/g, '');
     
-    await pool.execute(
-      `INSERT INTO blogs (id, slug, title, excerpt, content, author, date, category, image) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
+    const newBlog = await prisma.blog.create({
+      data: {
         id,
         slug,
-        blog.title,
-        blog.excerpt,
-        blog.content,
-        blog.author || 'ليث السالمي',
-        blog.date,
-        blog.category || 'تحليل فني',
-        blog.image || '/placeholder-blog.jpg'
-      ]
-    );
+        title: blog.title,
+        excerpt: blog.excerpt,
+        content: blog.content,
+        author: blog.author || 'ليث السالمي',
+        date: new Date(blog.date),
+        category: blog.category || 'تحليل فني',
+        image: blog.image || '/placeholder-blog.jpg'
+      }
+    });
     
-    const [rows] = await pool.execute<any[]>('SELECT * FROM blogs WHERE id = ?', [id]);
-    return NextResponse.json({ success: true, blog: rows[0] });
+    return NextResponse.json({ success: true, blog: newBlog });
   } catch (error: any) {
     console.error('Error creating blog:', error);
-    if (error.code === 'ER_DUP_ENTRY') {
+    if (error.code === 'P2002') {
       return NextResponse.json(
         { error: 'Blog with this slug already exists' },
         { status: 409 }
@@ -61,36 +59,33 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const updatedBlog = await request.json();
-    const pool = getPool();
     
-    const [existing] = await pool.execute('SELECT * FROM blogs WHERE id = ?', [updatedBlog.id]);
+    const existing = await prisma.blog.findUnique({
+      where: { id: updatedBlog.id }
+    });
     
-    if (!Array.isArray(existing) || existing.length === 0) {
+    if (!existing) {
       return NextResponse.json({ error: 'Blog not found' }, { status: 404 });
     }
     
-    await pool.execute(
-      `UPDATE blogs 
-       SET slug = ?, title = ?, excerpt = ?, content = ?, author = ?, date = ?, category = ?, image = ?
-       WHERE id = ?`,
-      [
-        updatedBlog.slug,
-        updatedBlog.title,
-        updatedBlog.excerpt,
-        updatedBlog.content,
-        updatedBlog.author || 'ليث السالمي',
-        updatedBlog.date,
-        updatedBlog.category || 'تحليل فني',
-        updatedBlog.image || '/placeholder-blog.jpg',
-        updatedBlog.id
-      ]
-    );
+    const blog = await prisma.blog.update({
+      where: { id: updatedBlog.id },
+      data: {
+        slug: updatedBlog.slug,
+        title: updatedBlog.title,
+        excerpt: updatedBlog.excerpt,
+        content: updatedBlog.content,
+        author: updatedBlog.author || 'ليث السالمي',
+        date: new Date(updatedBlog.date),
+        category: updatedBlog.category || 'تحليل فني',
+        image: updatedBlog.image || '/placeholder-blog.jpg'
+      }
+    });
     
-    const [rows] = await pool.execute<any[]>('SELECT * FROM blogs WHERE id = ?', [updatedBlog.id]);
-    return NextResponse.json({ success: true, blog: rows[0] });
+    return NextResponse.json({ success: true, blog });
   } catch (error: any) {
     console.error('Error updating blog:', error);
-    if (error.code === 'ER_DUP_ENTRY') {
+    if (error.code === 'P2002') {
       return NextResponse.json(
         { error: 'Blog with this slug already exists' },
         { status: 409 }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPool } from '@/lib/db';
+import { prisma } from '@/lib/db';
 
 export async function DELETE(
   request: NextRequest,
@@ -7,16 +7,18 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const pool = getPool();
     
-    const [result] = await pool.execute<any>('DELETE FROM services WHERE id = ?', [id]);
-    
-    const affectedRows = (result as any).affectedRows || 0;
-    if (affectedRows === 0) {
-      return NextResponse.json({ error: 'Service not found' }, { status: 404 });
+    try {
+      await prisma.service.delete({
+        where: { id }
+      });
+      return NextResponse.json({ success: true });
+    } catch (error: any) {
+      if (error.code === 'P2025') {
+        return NextResponse.json({ error: 'Service not found' }, { status: 404 });
+      }
+      throw error;
     }
-    
-    return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting service:', error);
     return NextResponse.json(

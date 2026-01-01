@@ -4,17 +4,22 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && prisma migrate deploy && next build",
     "start": "next start",
     "lint": "eslint",
-    "setup-db": "tsx scripts/setup-db.ts",
-    "setup-services": "mysql -u root -p < lib/db-services.sql",
-    "migrate": "tsx scripts/migrate-json-to-mysql.ts"
+    "postinstall": "prisma generate",
+    "migrate": "tsx scripts/migrate-data.ts",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio",
+    "db:seed": "tsx scripts/migrate-data.ts"
   },
   "dependencies": {
+    "@prisma/client": "^6.19.1",
     "framer-motion": "^12.23.26",
-    "mysql2": "^3.11.5",
     "next": "16.1.1",
+    "prisma": "^6.19.1",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },

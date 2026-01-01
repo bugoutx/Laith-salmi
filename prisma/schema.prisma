@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Blog {
+  id        String   @id
+  slug      String   @unique
+  title     String   @db.VarChar(500)
+  excerpt   String   @db.Text
+  content   String   @db.Text
+  author    String   @default("ليث السالمي") @db.VarChar(255)
+  date      DateTime @db.Date
+  category  String   @default("تحليل فني") @db.VarChar(255)
+  image     String   @default("/placeholder-blog.jpg") @db.VarChar(500)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  @@index([slug])
+  @@index([date])
+  @@index([category])
+  @@map("blogs")
+}
+
+model Service {
+  id              String   @id
+  title           String   @db.VarChar(500)
+  subtitle        String?  @db.VarChar(500)
+  description     String   @db.Text
+  valueProposition String? @map("value_proposition") @db.Text
+  icon            String   @default("🎯") @db.VarChar(100)
+  color           String   @default("from-green-500/20 to-emerald-500/20") @db.VarChar(100)
+  accentColor     String   @default("green-500") @map("accent_color") @db.VarChar(100)
+  displayOrder    Int      @default(0) @map("display_order")
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  @@index([displayOrder])
+  @@index([isActive])
+  @@map("services")
+}
+

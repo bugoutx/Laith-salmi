@@ -1,92 +1,95 @@
 # Database Setup Guide
 
-This project uses MySQL for storing blog posts and admin data.
+This project uses **PostgreSQL** with **Prisma** on **Vercel**.
 
 ## Prerequisites
 
-- MySQL server installed and running
-- Node.js and npm installed
+- PostgreSQL database (local or hosted on Vercel/other provider)
+- `DATABASE_URL` environment variable configured
 
-## Installation
+## Local Development Setup
 
-1. Install dependencies:
-```bash
-npm install
-```
+1. **Set up your `.env.local` file:**
+   ```env
+   DATABASE_URL="postgresql://user:password@localhost:5432/database_name?schema=public"
+   ```
 
-## Database Configuration
+2. **Generate Prisma Client:**
+   ```bash
+   npm run postinstall
+   # or
+   npx prisma generate
+   ```
 
-Create a `.env.local` file in the root directory with your database credentials:
+3. **Create and apply migrations:**
+   ```bash
+   npm run db:migrate
+   ```
+   This will create a new migration and apply it to your database.
 
-```env
-# Database Configuration
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=your_password
-DB_NAME=laith_salmi
+4. **Seed initial data (optional):**
+   ```bash
+   npm run db:seed
+   ```
+   This will populate your database with default services and migrate any blogs from `data/blogs.json`.
 
-# Admin Panel Password
-ADMIN_PASSWORD=your_secure_password_here
-```
+## Vercel Deployment Setup
 
-## Database Setup
+1. **Create initial migration (first time only):**
+   ```bash
+   npm run db:migrate
+   ```
+   This creates a migration file in `prisma/migrations/`. Commit this to your repository.
 
-Run the database setup script to create the database and tables:
+2. **Add environment variable in Vercel:**
+   - Go to your project settings → Environment Variables
+   - Add `DATABASE_URL` with your PostgreSQL connection string
+   - Make sure it's available for Production, Preview, and Development environments
 
-```bash
-npm run setup-db
-```
+3. **Migrations run automatically:**
+   - The build script includes `prisma migrate deploy` which will automatically apply pending migrations during deployment
+   - After the first migration is committed, subsequent deployments will apply new migrations automatically
 
-This will:
-- Create the database `laith_salmi` if it doesn't exist
-- Create the `blogs` table with proper schema
-- Set up indexes for better performance
+4. **After first deployment, seed data (if needed):**
+   ```bash
+   # Via Vercel CLI (if installed)
+   vercel env pull .env.local
+   npm run db:seed
+   ```
+   Or use Vercel's dashboard to run commands in your project's shell.
 
-## Manual Setup (Alternative)
+## Available Commands
 
-If you prefer to set up manually, you can run the SQL file directly:
-
-```bash
-mysql -u root -p < lib/db-setup.sql
-```
-
-Or copy the contents of `lib/db-setup.sql` and run it in your MySQL client.
+- `npm run db:migrate` - Create and apply a new migration (development)
+- `npm run db:migrate:deploy` - Apply pending migrations (production)
+- `npm run db:push` - Push schema changes without creating migration (quick dev)
+- `npm run db:studio` - Open Prisma Studio (database GUI)
+- `npm run db:seed` - Seed database with initial data
 
 ## Database Schema
 
-### blogs table
-- `id` (VARCHAR) - Primary key
-- `slug` (VARCHAR) - Unique URL slug
-- `title` (VARCHAR) - Blog post title
-- `excerpt` (TEXT) - Short description
-- `content` (LONGTEXT) - Full blog content
-- `author` (VARCHAR) - Author name
-- `date` (DATE) - Publication date
-- `category` (VARCHAR) - Blog category
-- `image` (VARCHAR) - Image path
-- `created_at` (TIMESTAMP) - Creation timestamp
-- `updated_at` (TIMESTAMP) - Last update timestamp
+The database includes two main models:
+
+- **Blog** - Blog posts with Arabic content
+- **Service** - Services offered by the business
+
+See `prisma/schema.prisma` for the complete schema definition.
 
 ## Troubleshooting
 
 ### Connection Issues
-- Make sure MySQL server is running
-- Verify database credentials in `.env.local`
-- Check if the database exists
 
-### Migration from JSON
+- Verify `DATABASE_URL` is correctly set in `.env.local` (local) or Vercel environment variables (production)
+- Check that your PostgreSQL database is accessible from your network/Vercel
+- Ensure SSL is enabled if required (add `?sslmode=require` to connection string)
 
-If you have existing blogs in `data/blogs.json`, you can migrate them automatically:
+### Migration Issues
 
-```bash
-npm run migrate
-```
+- If migrations fail, check that your database user has proper permissions
+- Use `prisma migrate reset` (careful: deletes all data) to start fresh
+- Check migration files in `prisma/migrations/` for errors
 
-This script will:
-- Read all blogs from `data/blogs.json`
-- Insert them into the MySQL database
-- Skip duplicates (based on ID or slug)
-- Show progress and summary
+### Prisma Client Issues
 
-**Note:** Make sure to run `npm run setup-db` first to create the database tables.
-
+- Run `npx prisma generate` to regenerate the client after schema changes
+- Clear `.next` cache: `rm -rf .next` and rebuild

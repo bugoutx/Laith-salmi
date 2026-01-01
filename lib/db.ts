@@ -1,33 +1,28 @@
-import mysql from 'mysql2/promise';
+import { PrismaClient } from '@prisma/client';
 
-// Database connection pool
-let pool: mysql.Pool | null = null;
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined;
+};
 
-export function getPool(): mysql.Pool {
-  if (!pool) {
-    pool = mysql.createPool({
-      host: process.env.DB_HOST || 'localhost',
-      user: process.env.DB_USER || 'root',
-      password: process.env.DB_PASSWORD || '',
-      database: process.env.DB_NAME || 'laith_salmi',
-      waitForConnections: true,
-      connectionLimit: 10,
-      queueLimit: 0,
-    });
-  }
-  return pool;
+export const prisma =
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+  });
+
+// Prevent multiple instances of Prisma Client in development
+if (process.env.NODE_ENV !== 'production') {
+  globalForPrisma.prisma = prisma;
 }
 
 // Test connection
 export async function testConnection(): Promise<boolean> {
   try {
-    const connection = await getPool().getConnection();
-    await connection.ping();
-    connection.release();
+    await prisma.$connect();
+    await prisma.$queryRaw`SELECT 1`;
     return true;
   } catch (error) {
     console.error('Database connection error:', error);
     return false;
   }
 }
-
