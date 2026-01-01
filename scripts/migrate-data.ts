@@ -76,9 +76,97 @@ async function setupServicesTable() {
   }
 }
 
+async function setupContentItems() {
+  console.log('Setting up content items...');
+  
+  try {
+    // Check if content items already exist
+    const existing = await prisma.contentItem.count();
+    
+    if (existing === 0) {
+      console.log('Inserting default content items...');
+      
+      const defaultContentItems = [
+        {
+          id: '1',
+          type: 'video' as const,
+          mediaUrl: '/placeholder-video.mp4',
+          title: 'كيف أتعامل مع السوق؟',
+          subtitle: null,
+          description: 'أتعامل مع السوق بمنهجية واضحة تقوم على قراءة السلوك وليس التوقع. إدارة المخاطر تأتي قبل أي قرار، والانضباط هو الأساس الذي يبني عليه كل تحليل.',
+          eyebrow: 'منهجية • فلسفة • انضباط',
+          displayOrder: 1,
+          isActive: true
+        },
+        {
+          id: '2',
+          type: 'image' as const,
+          mediaUrl: '/laith2.png',
+          title: 'التحليل الفني المتخصص',
+          subtitle: 'خبرة عملية في أسواق المعادن',
+          description: 'أقدّم لك خبرتي العملية في أسواق المعادن، من فهم حركة الأسعار إلى إدارة المخاطر واتخاذ القرارات بثبات.',
+          eyebrow: 'تخصص • خبرة • نتائج',
+          displayOrder: 2,
+          isActive: true
+        },
+        {
+          id: '3',
+          type: 'image' as const,
+          mediaUrl: '/laith2.png',
+          title: 'منهجية وزن الأدلة',
+          subtitle: 'قراءة شاملة للسوق',
+          description: 'أعتمد على منهجية وزن الأدلة (Weight of Evidence) التي تجمع وترجّح مجموعة من الأدلة لفهم الصورة الكاملة للسوق، بدلاً من الاعتماد على إشارة واحدة.',
+          eyebrow: 'منهجية • دقة • شمولية',
+          displayOrder: 3,
+          isActive: true
+        },
+        {
+          id: '4',
+          type: 'image' as const,
+          mediaUrl: '/laith2.png',
+          title: 'المرونة في التعامل',
+          subtitle: 'التكيّف مع تغيّرات السوق',
+          description: 'المرونة عنصر أساسي في منهجيتي. مع تغيّر معطيات السوق تتغيّر القرارات، دون عناد أو تمسّك برأي مسبق. المرونة هنا تعني الالتزام بالمنهج بدل الالتزام بالرأي الشخصي.',
+          eyebrow: 'مرونة • تكيّف • انضباط',
+          displayOrder: 4,
+          isActive: true
+        },
+        {
+          id: '5',
+          type: 'image' as const,
+          mediaUrl: '/laith2.png',
+          title: 'التعامل مع الاحتمالات',
+          subtitle: 'السوق مساحة احتمالات لا يقين',
+          description: 'أتعامل مع السوق على أنه مساحة احتمالات لا يقين، حيث تُبنى القرارات على الترجيح وليس على التوقع أو الانطباع اللحظي. هذا النهج يمنحك رؤية واضحة وواقعية.',
+          eyebrow: 'احتمالات • ترجيح • واقعية',
+          displayOrder: 5,
+          isActive: true
+        }
+      ];
+
+      for (const item of defaultContentItems) {
+        await prisma.contentItem.create({
+          data: item
+        });
+        console.log(`Inserted content item: "${item.title || item.type}"`);
+      }
+      
+      console.log('Default content items inserted successfully!');
+    } else {
+      console.log(`Content items table already has ${existing} entries. Skipping default insertion.`);
+    }
+  } catch (error) {
+    console.error('Error setting up content items:', error);
+    throw error;
+  }
+}
+
 async function migrateData() {
   // First, ensure services table exists and has default data
   await setupServicesTable();
+  
+  // Setup content items
+  await setupContentItems();
   
   // Then migrate blogs if they exist
   const jsonPath = join(process.cwd(), 'data', 'blogs.json');

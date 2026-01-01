@@ -2,17 +2,48 @@
 
 import { motion, useInView } from 'framer-motion';
 import { useRef, useState, useCallback, useEffect } from 'react';
+import Image from 'next/image';
+
+interface ContentItem {
+  id: string;
+  type: 'video' | 'image';
+  mediaUrl: string;
+  title?: string | null;
+  subtitle?: string | null;
+  description?: string | null;
+  eyebrow?: string | null;
+  displayOrder: number;
+}
 
 export default function VideoSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
   
+  const [items, setItems] = useState<ContentItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeItemIndex, setActiveItemIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Fetch content items
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await fetch('/api/content-items');
+        const data = await response.json();
+        setItems(data);
+      } catch (error) {
+        console.error('Error fetching content items:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchItems();
+  }, []);
 
   // Detect desktop and autoplay on desktop when in view
   useEffect(() => {
@@ -28,15 +59,15 @@ export default function VideoSection() {
 
   // Autoplay on desktop when section comes into view
   useEffect(() => {
-    if (isInView && isDesktop && videoRef.current) {
+    if (isInView && isDesktop && videoRef.current && items[activeItemIndex]?.type === 'video') {
       videoRef.current.play().catch(() => {
         // Autoplay failed, user interaction required
       });
     }
-  }, [isInView, isDesktop]);
+  }, [isInView, isDesktop, activeItemIndex, items]);
 
   const handlePlayPause = useCallback(() => {
-    if (videoRef.current) {
+    if (videoRef.current && items[activeItemIndex]?.type === 'video') {
       if (isPlaying) {
         videoRef.current.pause();
       } else {
@@ -44,7 +75,7 @@ export default function VideoSection() {
       }
       setIsPlaying(!isPlaying);
     }
-  }, [isPlaying]);
+  }, [isPlaying, activeItemIndex, items]);
 
   const handleTimeUpdate = useCallback(() => {
     if (videoRef.current) {
@@ -77,6 +108,28 @@ export default function VideoSection() {
     }
   }, [duration]);
 
+  const currentItem = items[activeItemIndex];
+
+  if (loading) {
+    return (
+      <section 
+        ref={sectionRef}
+        className="relative w-full py-12 lg:py-16 overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-gradient-radial from-zinc-900 via-zinc-950 to-black" />
+        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8">
+          <div className="text-center py-20">
+            <p className="text-zinc-400" dir="rtl">جاري التحميل...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!currentItem) {
+    return null;
+  }
+
   return (
     <section 
       ref={sectionRef}
@@ -92,7 +145,7 @@ export default function VideoSection() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           
-          {/* Video Container - Left side on desktop, after content on mobile */}
+          {/* Media Container - Left side on desktop, after content on mobile */}
           <motion.div
             initial={{ opacity: 0, scale: 0.98 }}
             animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.98 }}
@@ -103,60 +156,95 @@ export default function VideoSection() {
               {/* Subtle green glow */}
               <div className="absolute inset-0 bg-green-500/5 rounded-2xl pointer-events-none" />
               
-              {/* Video element */}
+              {/* Video or Image element */}
               <div className="relative aspect-video bg-black">
-                <video
-                  ref={videoRef}
-                  className="w-full h-full object-cover"
-                  muted
-                  playsInline
-                  onTimeUpdate={handleTimeUpdate}
-                  onLoadedMetadata={handleLoadedMetadata}
-                  onPlay={() => setIsPlaying(true)}
-                  onPause={() => setIsPlaying(false)}
-                  aria-label="Laith Salmi explains his market philosophy"
-                >
-                  <source src="/placeholder-video.mp4" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-
-                {/* Custom controls overlay - show play button when paused or on mobile */}
-                <div className={`absolute inset-0 flex items-center justify-center transition-colors duration-300 ${!isPlaying ? 'bg-black/0 hover:bg-black/20' : 'bg-transparent hover:bg-black/10'}`}>
-                  {/* Play/Pause button - minimal, hidden when playing on desktop */}
-                  {(!isPlaying || !isDesktop) && (
-                    <button
-                      onClick={handlePlayPause}
-                      className="w-16 h-16 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-green-500/50"
-                      aria-label={isPlaying ? 'Pause video' : 'Play video'}
+                {currentItem.type === 'video' ? (
+                  <>
+                    <video
+                      ref={videoRef}
+                      key={currentItem.mediaUrl}
+                      className="w-full h-full object-cover"
+                      muted
+                      playsInline
+                      onTimeUpdate={handleTimeUpdate}
+                      onLoadedMetadata={handleLoadedMetadata}
+                      onPlay={() => setIsPlaying(true)}
+                      onPause={() => setIsPlaying(false)}
+                      aria-label={currentItem.title || 'Video content'}
                     >
-                      {isPlaying ? (
-                        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
-                        </svg>
-                      ) : (
-                        <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
+                      <source src={currentItem.mediaUrl} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+
+                    {/* Custom controls overlay */}
+                    <div className={`absolute inset-0 flex items-center justify-center transition-colors duration-300 ${!isPlaying ? 'bg-black/0 hover:bg-black/20' : 'bg-transparent hover:bg-black/10'}`}>
+                      {(!isPlaying || !isDesktop) && (
+                        <button
+                          onClick={handlePlayPause}
+                          className="w-16 h-16 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-green-500/50"
+                          aria-label={isPlaying ? 'Pause video' : 'Play video'}
+                        >
+                          {isPlaying ? (
+                            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+                            </svg>
+                          ) : (
+                            <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                          )}
+                        </button>
                       )}
-                    </button>
-                  )}
-                </div>
+                    </div>
 
-                {/* Progress bar - bottom */}
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-zinc-800/50 cursor-pointer" onClick={handleProgressClick}>
-                  <motion.div
-                    className="h-full bg-green-500"
-                    style={{ width: `${progress}%` }}
-                    transition={{ duration: 0.1 }}
+                    {/* Progress bar */}
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-zinc-800/50 cursor-pointer" onClick={handleProgressClick}>
+                      <motion.div
+                        className="h-full bg-green-500"
+                        style={{ width: `${progress}%` }}
+                        transition={{ duration: 0.1 }}
+                      />
+                    </div>
+
+                    {/* Time display */}
+                    <div className="absolute bottom-2 right-3 text-xs text-zinc-400 font-mono">
+                      {formatTime(currentTime)} / {formatTime(duration)}
+                    </div>
+                  </>
+                ) : (
+                  <Image
+                    src={currentItem.mediaUrl}
+                    alt={currentItem.title || 'Content image'}
+                    fill
+                    className="object-cover"
+                    priority
                   />
-                </div>
-
-                {/* Time display - bottom right */}
-                <div className="absolute bottom-2 right-3 text-xs text-zinc-400 font-mono">
-                  {formatTime(currentTime)} / {formatTime(duration)}
-                </div>
+                )}
               </div>
             </div>
+
+            {/* Item indicators if multiple items */}
+            {items.length > 1 && (
+              <div className="flex justify-center gap-2 mt-4">
+                {items.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setActiveItemIndex(index);
+                      setIsPlaying(false);
+                      setProgress(0);
+                      setCurrentTime(0);
+                    }}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      index === activeItemIndex 
+                        ? 'w-8 bg-green-500' 
+                        : 'w-2 bg-zinc-600 hover:bg-zinc-500'
+                    }`}
+                    aria-label={`Go to item ${index + 1}`}
+                  />
+                ))}
+              </div>
+            )}
           </motion.div>
 
           {/* Text Content - Right side on desktop, first on mobile */}
@@ -168,76 +256,55 @@ export default function VideoSection() {
             dir="rtl"
           >
             {/* Eyebrow text */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-sm font-medium tracking-wide text-zinc-400 uppercase"
-            >
-              منهجية • فلسفة • انضباط
-            </motion.p>
+            {currentItem.eyebrow && (
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="text-sm font-medium tracking-wide text-zinc-400 uppercase"
+              >
+                {currentItem.eyebrow}
+              </motion.p>
+            )}
 
             {/* Headline */}
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-zinc-50"
-            >
-              كيف أتعامل مع السوق؟
-            </motion.h2>
-
-            {/* Paragraph */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="text-lg sm:text-xl leading-relaxed text-zinc-300 max-w-2xl lg:ms-auto"
-            >
-              أتعامل مع السوق بمنهجية واضحة تقوم على قراءة السلوك وليس التوقع. 
-              إدارة المخاطر تأتي قبل أي قرار، والانضباط هو الأساس الذي يبني عليه كل تحليل.
-            </motion.p>
-
-            {/* Bullet points */}
-            <motion.ul
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="space-y-4 text-zinc-300"
-            >
-              <li className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0" />
-                <span className="text-base">إدارة المخاطر قبل الربح</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0" />
-                <span className="text-base">قراءة السلوك لا التوقع</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0" />
-                <span className="text-base">تخصص عميق في المعادن</span>
-              </li>
-            </motion.ul>
-
-            {/* Secondary CTA */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.6, delay: 0.7 }}
-              className="pt-4"
-            >
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-8 py-3 border border-zinc-600 hover:border-green-500 text-zinc-300 hover:text-green-400 font-medium rounded-lg transition-all duration-300 text-base"
+            {currentItem.title && (
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-zinc-50"
               >
-                تعرّف على المنهجية
-              </motion.button>
-            </motion.div>
+                {currentItem.title}
+              </motion.h2>
+            )}
+
+            {/* Subtitle */}
+            {currentItem.subtitle && (
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.6, delay: 0.45 }}
+                className="text-lg sm:text-xl text-green-400 font-medium"
+              >
+                {currentItem.subtitle}
+              </motion.p>
+            )}
+
+            {/* Description */}
+            {currentItem.description && (
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="text-lg sm:text-xl leading-relaxed text-zinc-300 max-w-2xl lg:ms-auto"
+              >
+                {currentItem.description}
+              </motion.p>
+            )}
           </motion.div>
         </div>
       </div>
     </section>
   );
 }
-

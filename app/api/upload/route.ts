@@ -16,25 +16,33 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-    if (!allowedTypes.includes(file.type)) {
+    const isImage = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(file.type);
+    const isVideo = ['video/mp4', 'video/webm', 'video/ogg'].includes(file.type);
+    
+    if (!isImage && !isVideo) {
       return NextResponse.json(
-        { error: 'Invalid file type. Only JPEG, PNG, and WebP are allowed.' },
+        { error: 'Invalid file type. Only images (JPEG, PNG, WebP) and videos (MP4, WebM, OGG) are allowed.' },
         { status: 400 }
       );
     }
 
-    // Validate file size (5MB max)
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    // Validate file size (5MB for images, 50MB for videos)
+    const maxImageSize = 5 * 1024 * 1024; // 5MB
+    const maxVideoSize = 50 * 1024 * 1024; // 50MB
+    const maxSize = isImage ? maxImageSize : maxVideoSize;
+    
     if (file.size > maxSize) {
       return NextResponse.json(
-        { error: 'File size exceeds 5MB limit' },
+        { error: `File size exceeds ${isImage ? '5MB' : '50MB'} limit` },
         { status: 400 }
       );
     }
 
     // Create uploads directory if it doesn't exist
-    const uploadsDir = join(process.cwd(), 'public', 'images', 'blogs');
+    const uploadsDir = isImage 
+      ? join(process.cwd(), 'public', 'images', 'content')
+      : join(process.cwd(), 'public', 'videos', 'content');
+    
     if (!existsSync(uploadsDir)) {
       await mkdir(uploadsDir, { recursive: true });
     }
@@ -53,8 +61,10 @@ export async function POST(request: NextRequest) {
     await writeFile(filepath, buffer);
 
     // Return the public URL path
-    const imageUrl = `/images/blogs/${filename}`;
-    return NextResponse.json({ success: true, url: imageUrl });
+    const mediaUrl = isImage 
+      ? `/images/content/${filename}`
+      : `/videos/content/${filename}`;
+    return NextResponse.json({ success: true, url: mediaUrl, type: isImage ? 'image' : 'video' });
   } catch (error) {
     console.error('Upload error:', error);
     return NextResponse.json(

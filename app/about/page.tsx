@@ -127,11 +127,179 @@ export default function AboutPage() {
               </div>
             </motion.div>
 
+            {/* What Distinguishes Laith Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.55 }}
+              className="mb-16"
+            >
+              {/* Section Header */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                className="text-center mb-12"
+              >
+                <div className="inline-flex items-center gap-3 mb-4">
+                  <div className="w-12 h-px bg-green-500/50" />
+                  <span className="text-sm font-medium tracking-wide text-green-400 uppercase">التميّز</span>
+                  <div className="w-12 h-px bg-green-500/50" />
+                </div>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-50 mb-4" dir="rtl">
+                  ما يميّز <span className="text-green-400">ليث السالمي</span>
+                </h2>
+              </motion.div>
+
+              {/* Main Content Card */}
+              <div className="relative max-w-5xl mx-auto">
+                {/* Background Card */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.65 }}
+                  className="relative p-8 lg:p-12 rounded-2xl bg-zinc-900/60 backdrop-blur-sm border border-zinc-800/50 overflow-hidden"
+                >
+                  {/* Animated background elements */}
+                  <motion.div
+                    className="absolute top-0 right-0 w-64 h-64 bg-green-500/5 rounded-full blur-3xl"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      opacity: [0.3, 0.5, 0.3],
+                    }}
+                    transition={{
+                      duration: 8,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                  <motion.div
+                    className="absolute bottom-0 left-0 w-48 h-48 bg-green-500/5 rounded-full blur-3xl"
+                    animate={{
+                      scale: [1, 1.3, 1],
+                      opacity: [0.2, 0.4, 0.2],
+                    }}
+                    transition={{
+                      duration: 10,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 1
+                    }}
+                  />
+
+                  {/* Content */}
+                  <div className="relative z-10 space-y-8 text-right" dir="rtl">
+                    {/* Introduction */}
+                    <motion.div
+                      initial={{ opacity: 0, x: 30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.8, delay: 0.7 }}
+                      className="space-y-4"
+                    >
+                      <p className="text-lg sm:text-xl text-zinc-300 leading-relaxed">
+                        الأسواق المالية بطبيعتها متغيّرة وغير ثابتة،
+                        ولا تتحرّك وفق نمط واحد أو سلوك دائم،
+                        فما ينجح في مرحلة قد يفقد فاعليته في مرحلة أخرى.
+                      </p>
+                      <p className="text-lg sm:text-xl text-zinc-300 leading-relaxed">
+                        لهذا، فإن الاعتماد على أسلوب جامد أو إشارة واحدة
+                        لا يكفي لبناء قرارات ناجحة وقابلة للاستمرار.
+                      </p>
+                    </motion.div>
+
+                    {/* Divider */}
+                    <motion.div
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ duration: 0.8, delay: 0.9 }}
+                      className="h-px bg-gradient-to-l from-transparent via-green-500/50 to-transparent"
+                    />
+
+                    {/* Methodology Section */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.8, delay: 1.0 }}
+                      className="space-y-6"
+                    >
+                      <div className="flex items-start gap-4">
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ duration: 0.5, delay: 1.1, type: "spring" }}
+                          className="flex-shrink-0 w-12 h-12 rounded-lg bg-green-500/20 border border-green-500/30 flex items-center justify-center mt-1"
+                        >
+                          <span className="text-2xl">⚖️</span>
+                        </motion.div>
+                        <div className="flex-1 space-y-4">
+                          <h3 className="text-xl sm:text-2xl font-bold text-green-400">
+                            منهجية وزن الأدلة والمرونة في قراءة السوق
+                          </h3>
+                          <p className="text-zinc-300 leading-relaxed text-base sm:text-lg">
+                            يتميّز أسلوب ليث بالاعتماد على منهجية وزن الأدلة (Weight of Evidence)،
+                            وهي منهجية لا تقوم على البحث عن إشارة مثالية،
+                            بل على جمع وترجيح مجموعة من الأدلة لفهم الصورة الكاملة للسوق.
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    {/* Philosophy Section */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.8, delay: 1.2 }}
+                      className="p-6 rounded-xl bg-zinc-800/40 border-r-4 border-green-500/50 space-y-4"
+                    >
+                      <p className="text-zinc-300 leading-relaxed text-base sm:text-lg">
+                        يتعامل ليث مع السوق على أنه مساحة احتمالات لا يقين،
+                        حيث تُبنى القرارات على الترجيح،
+                        وليس على التوقع أو الانطباع اللحظي.
+                      </p>
+                    </motion.div>
+
+                    {/* Flexibility Section */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.8, delay: 1.3 }}
+                      className="space-y-4"
+                    >
+                      <div className="flex items-start gap-4">
+                        <motion.div
+                          initial={{ scale: 0, rotate: -180 }}
+                          animate={{ scale: 1, rotate: 0 }}
+                          transition={{ duration: 0.6, delay: 1.4, type: "spring" }}
+                          className="flex-shrink-0 w-12 h-12 rounded-lg bg-green-500/20 border border-green-500/30 flex items-center justify-center mt-1"
+                        >
+                          <span className="text-2xl">🔄</span>
+                        </motion.div>
+                        <div className="flex-1 space-y-3">
+                          <h3 className="text-xl sm:text-2xl font-bold text-green-400">
+                            المرونة: عنصر أساسي
+                          </h3>
+                          <p className="text-zinc-300 leading-relaxed text-base sm:text-lg">
+                            المرونة عنصر أساسي في هذه المنهجية،
+                            فمع تغيّر معطيات السوق تتغيّر القرارات،
+                            دون عناد أو تمسّك برأي مسبق.
+                          </p>
+                          <p className="text-zinc-300 leading-relaxed text-base sm:text-lg">
+                            المرونة هنا لا تعني التخبّط،
+                            بل تعني الالتزام بالمنهج بدل الالتزام بالرأي الشخصي.
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+
             {/* Experience Highlights */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
+              transition={{ duration: 0.8, delay: 1.5 }}
               className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
             >
               <div className="p-6 rounded-xl bg-zinc-900/40 backdrop-blur-sm border border-zinc-800/50 text-center">
@@ -154,7 +322,7 @@ export default function AboutPage() {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
+              transition={{ duration: 0.8, delay: 1.6 }}
               className="text-center py-12"
             >
               <blockquote className="text-xl sm:text-2xl font-light text-zinc-300 leading-relaxed max-w-4xl mx-auto" dir="rtl">
@@ -172,7 +340,7 @@ export default function AboutPage() {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
+              transition={{ duration: 0.8, delay: 1.7 }}
               className="text-center"
             >
               <motion.button

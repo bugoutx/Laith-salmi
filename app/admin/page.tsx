@@ -31,16 +31,30 @@ interface Service {
   is_active: boolean;
 }
 
+interface ContentItem {
+  id: string;
+  type: 'video' | 'image';
+  media_url: string;
+  title?: string | null;
+  subtitle?: string | null;
+  description?: string | null;
+  eyebrow?: string | null;
+  display_order: number;
+  is_active: boolean;
+}
+
 export default function AdminPanel() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'blogs' | 'services'>('blogs');
+  const [activeTab, setActiveTab] = useState<'blogs' | 'services' | 'content'>('blogs');
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [services, setServices] = useState<Service[]>([]);
+  const [contentItems, setContentItems] = useState<ContentItem[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
   const [editingService, setEditingService] = useState<Service | null>(null);
+  const [editingContentItem, setEditingContentItem] = useState<ContentItem | null>(null);
   const [formData, setFormData] = useState<Blog>({
     id: '',
     slug: '',
@@ -67,6 +81,19 @@ export default function AdminPanel() {
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [contentFormData, setContentFormData] = useState<ContentItem>({
+    id: '',
+    type: 'image',
+    media_url: '',
+    title: '',
+    subtitle: '',
+    description: '',
+    eyebrow: '',
+    display_order: 0,
+    is_active: true
+  });
+  const [mediaPreview, setMediaPreview] = useState<string>('');
+  const mediaFileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     // Check authentication
@@ -75,6 +102,7 @@ export default function AdminPanel() {
       setIsAuthenticated(true);
       loadBlogs();
       loadServices();
+      loadContentItems();
     } else {
       router.push('/admin/login');
     }
@@ -98,6 +126,16 @@ export default function AdminPanel() {
       setServices(data);
     } catch (error) {
       console.error('Error loading services:', error);
+    }
+  };
+
+  const loadContentItems = async () => {
+    try {
+      const response = await fetch('/api/content-items');
+      const data = await response.json();
+      setContentItems(data);
+    } catch (error) {
+      console.error('Error loading content items:', error);
     }
   };
 
@@ -280,6 +318,124 @@ export default function AdminPanel() {
     }
   };
 
+  // Content Item handlers
+  const handleContentItemSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      const response = await fetch('/api/content-items', {
+        method: editingContentItem ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(contentFormData),
+      });
+
+      if (response.ok) {
+        await loadContentItems();
+        resetContentForm();
+        alert(editingContentItem ? 'تم تحديث العنصر بنجاح' : 'تم إضافة العنصر بنجاح');
+      }
+    } catch (error) {
+      console.error('Error saving content item:', error);
+      alert('حدث خطأ أثناء الحفظ');
+    }
+  };
+
+  const handleContentItemEdit = (item: ContentItem) => {
+    setEditingContentItem(item);
+    setContentFormData(item);
+    setMediaPreview(item.media_url);
+    setActiveTab('content');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleContentItemDelete = async (id: string) => {
+    if (!confirm('هل أنت متأكد من حذف هذا العنصر؟')) return;
+
+    try {
+      const response = await fetch(`/api/content-items/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        await loadContentItems();
+        alert('تم حذف العنصر بنجاح');
+      }
+    } catch (error) {
+      console.error('Error deleting content item:', error);
+      alert('حدث خطأ أثناء الحذف');
+    }
+  };
+
+  const handleMediaUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const isImage = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(file.type);
+    const isVideo = ['video/mp4', 'video/webm', 'video/ogg'].includes(file.type);
+
+    if (!isImage && !isVideo) {
+      alert('نوع الملف غير مدعوم. يرجى اختيار صورة أو فيديو');
+      return;
+    }
+
+    const maxImageSize = 5 * 1024 * 1024; // 5MB
+    const maxVideoSize = 50 * 1024 * 1024; // 50MB
+    const maxSize = isImage ? maxImageSize : maxVideoSize;
+
+    if (file.size > maxSize) {
+      alert(`حجم الملف كبير جداً. الحد الأقصى ${isImage ? '5' : '50'} ميجابايت`);
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.url) {
+        setContentFormData(prev => ({ 
+          ...prev, 
+          media_url: data.url,
+          type: data.type || (isImage ? 'image' : 'video')
+        }));
+        setMediaPreview(data.url);
+      } else {
+        alert(data.error || 'فشل رفع الملف');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('حدث خطأ أثناء رفع الملف');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const resetContentForm = () => {
+    setContentFormData({
+      id: '',
+      type: 'image',
+      media_url: '',
+      title: '',
+      subtitle: '',
+      description: '',
+      eyebrow: '',
+      display_order: contentItems.length,
+      is_active: true
+    });
+    setMediaPreview('');
+    setEditingContentItem(null);
+    if (mediaFileInputRef.current) {
+      mediaFileInputRef.current.value = '';
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('admin_auth');
     router.push('/admin/login');
@@ -361,6 +517,16 @@ export default function AdminPanel() {
               >
                 الخدمات ({services.length})
               </button>
+              <button
+                onClick={() => setActiveTab('content')}
+                className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                  activeTab === 'content'
+                    ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                    : 'bg-zinc-800/30 text-zinc-400 border border-zinc-700/30 hover:text-zinc-300'
+                }`}
+              >
+                المحتوى ({contentItems.length})
+              </button>
             </motion.div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -375,7 +541,9 @@ export default function AdminPanel() {
                   <h2 className="text-2xl font-bold text-zinc-50 mb-6" dir="rtl">
                     {activeTab === 'blogs' 
                       ? (isEditing ? 'تعديل مقال' : 'إضافة مقال جديد')
-                      : (editingService ? 'تعديل خدمة' : 'إضافة خدمة جديدة')
+                      : activeTab === 'services'
+                      ? (editingService ? 'تعديل خدمة' : 'إضافة خدمة جديدة')
+                      : (editingContentItem ? 'تعديل عنصر محتوى' : 'إضافة عنصر محتوى جديد')
                     }
                   </h2>
 
@@ -534,9 +702,9 @@ export default function AdminPanel() {
                           إلغاء
                         </button>
                       )}
-                    </div>
-                  </form>
-                  ) : (
+                      </div>
+                    </form>
+                  ) : activeTab === 'services' ? (
                     <form onSubmit={handleServiceSubmit} className="space-y-6" dir="rtl">
                       <div>
                         <label className="block text-sm font-medium text-zinc-300 mb-2">
@@ -646,7 +814,184 @@ export default function AdminPanel() {
                         )}
                       </div>
                     </form>
-                  )}
+                  ) : activeTab === 'content' ? (
+                    <form onSubmit={handleContentItemSubmit} className="space-y-6" dir="rtl">
+                      <div>
+                        <label className="block text-sm font-medium text-zinc-300 mb-2">
+                          نوع المحتوى
+                        </label>
+                        <select
+                          value={contentFormData.type}
+                          onChange={(e) => setContentFormData({ ...contentFormData, type: e.target.value as 'video' | 'image' })}
+                          className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-zinc-50 focus:outline-none focus:border-green-500"
+                        >
+                          <option value="image">صورة</option>
+                          <option value="video">فيديو</option>
+                        </select>
+                      </div>
+
+                      {/* Media Upload */}
+                      <div>
+                        <label className="block text-sm font-medium text-zinc-300 mb-2">
+                          {contentFormData.type === 'video' ? 'الفيديو' : 'الصورة'}
+                        </label>
+                        <div className="space-y-4">
+                          {/* Media Preview */}
+                          {mediaPreview && (
+                            <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-zinc-800/50 border border-zinc-700">
+                              {contentFormData.type === 'video' ? (
+                                <video
+                                  src={mediaPreview}
+                                  className="w-full h-full object-cover"
+                                  controls
+                                />
+                              ) : (
+                                <Image
+                                  src={mediaPreview}
+                                  alt="Preview"
+                                  fill
+                                  className="object-cover"
+                                  onError={() => setMediaPreview('')}
+                                />
+                              )}
+                            </div>
+                          )}
+                          
+                          {/* Upload Input */}
+                          <div className="flex items-center gap-4">
+                            <input
+                              ref={mediaFileInputRef}
+                              type="file"
+                              accept={contentFormData.type === 'video' 
+                                ? 'video/mp4,video/webm,video/ogg' 
+                                : 'image/jpeg,image/jpg,image/png,image/webp'}
+                              onChange={handleMediaUpload}
+                              disabled={uploading}
+                              className="hidden"
+                              id="media-upload"
+                            />
+                            <label
+                              htmlFor="media-upload"
+                              className={`flex-1 px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-zinc-50 cursor-pointer hover:border-green-500 transition-colors text-center ${
+                                uploading ? 'opacity-50 cursor-not-allowed' : ''
+                              }`}
+                            >
+                              {uploading ? 'جاري الرفع...' : `اختر ${contentFormData.type === 'video' ? 'فيديو' : 'صورة'}`}
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="أو أدخل رابط الملف"
+                              value={contentFormData.media_url}
+                              onChange={(e) => {
+                                setContentFormData({ ...contentFormData, media_url: e.target.value });
+                                setMediaPreview(e.target.value);
+                              }}
+                              className="flex-1 px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-zinc-50 focus:outline-none focus:border-green-500"
+                            />
+                          </div>
+                          <p className="text-xs text-zinc-500">
+                            {contentFormData.type === 'video' 
+                              ? 'الحد الأقصى لحجم الملف: 50 ميجابايت | الصيغ المدعومة: MP4, WebM, OGG'
+                              : 'الحد الأقصى لحجم الملف: 5 ميجابايت | الصيغ المدعومة: JPEG, PNG, WebP'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-zinc-300 mb-2">
+                          العنوان الرئيسي
+                        </label>
+                        <input
+                          type="text"
+                          value={contentFormData.title || ''}
+                          onChange={(e) => setContentFormData({ ...contentFormData, title: e.target.value })}
+                          className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-zinc-50 focus:outline-none focus:border-green-500"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-zinc-300 mb-2">
+                          العنوان الفرعي
+                        </label>
+                        <input
+                          type="text"
+                          value={contentFormData.subtitle || ''}
+                          onChange={(e) => setContentFormData({ ...contentFormData, subtitle: e.target.value })}
+                          className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-zinc-50 focus:outline-none focus:border-green-500"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-zinc-300 mb-2">
+                          النص العلوي (Eyebrow)
+                        </label>
+                        <input
+                          type="text"
+                          value={contentFormData.eyebrow || ''}
+                          onChange={(e) => setContentFormData({ ...contentFormData, eyebrow: e.target.value })}
+                          className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-zinc-50 focus:outline-none focus:border-green-500"
+                          placeholder="مثال: منهجية • فلسفة • انضباط"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-zinc-300 mb-2">
+                          الوصف
+                        </label>
+                        <textarea
+                          value={contentFormData.description || ''}
+                          onChange={(e) => setContentFormData({ ...contentFormData, description: e.target.value })}
+                          rows={5}
+                          className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-zinc-50 focus:outline-none focus:border-green-500"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-zinc-300 mb-2">
+                            ترتيب العرض
+                          </label>
+                          <input
+                            type="number"
+                            min="0"
+                            value={contentFormData.display_order}
+                            onChange={(e) => setContentFormData({ ...contentFormData, display_order: parseInt(e.target.value) || 0 })}
+                            className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-zinc-50 focus:outline-none focus:border-green-500"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="flex items-center gap-3 pt-8">
+                            <input
+                              type="checkbox"
+                              checked={contentFormData.is_active}
+                              onChange={(e) => setContentFormData({ ...contentFormData, is_active: e.target.checked })}
+                              className="w-4 h-4 text-green-600 bg-zinc-800 border-zinc-600 rounded focus:ring-green-500"
+                            />
+                            <span className="text-sm font-medium text-zinc-300">نشط</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4">
+                        <button
+                          type="submit"
+                          className="flex-1 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
+                        >
+                          {editingContentItem ? 'تحديث' : 'إضافة'}
+                        </button>
+                        {editingContentItem && (
+                          <button
+                            type="button"
+                            onClick={resetContentForm}
+                            className="px-6 py-3 bg-zinc-700 hover:bg-zinc-600 text-zinc-300 font-semibold rounded-lg transition-colors"
+                          >
+                            إلغاء
+                          </button>
+                        )}
+                      </div>
+                    </form>
+                  ) : null}
                 </motion.div>
               </div>
 
@@ -659,7 +1004,12 @@ export default function AdminPanel() {
                   className="p-6 rounded-2xl bg-zinc-900/40 backdrop-blur-sm border border-zinc-800/50"
                 >
                   <h2 className="text-xl font-bold text-zinc-50 mb-6" dir="rtl">
-                    {activeTab === 'blogs' ? `المقالات (${blogs.length})` : `الخدمات (${services.length})`}
+                    {activeTab === 'blogs' 
+                      ? `المقالات (${blogs.length})` 
+                      : activeTab === 'services'
+                      ? `الخدمات (${services.length})`
+                      : `عناصر المحتوى (${contentItems.length})`
+                    }
                   </h2>
 
                   <div className="space-y-4 max-h-[600px] overflow-y-auto">
@@ -688,7 +1038,7 @@ export default function AdminPanel() {
                           </div>
                         </div>
                       ))
-                    ) : (
+                    ) : activeTab === 'services' ? (
                       services.map((service) => (
                         <div
                           key={service.id}
@@ -719,7 +1069,38 @@ export default function AdminPanel() {
                           </div>
                         </div>
                       ))
-                    )}
+                    ) : activeTab === 'content' ? (
+                      contentItems.map((item) => (
+                        <div
+                          key={item.id}
+                          className="p-4 rounded-lg bg-zinc-800/30 border border-zinc-700/30 hover:border-green-500/30 transition-colors"
+                        >
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-lg">{item.type === 'video' ? '🎥' : '🖼️'}</span>
+                            <h3 className="text-sm font-semibold text-zinc-50 line-clamp-1" dir="rtl">
+                              {item.title || `عنصر ${item.type === 'video' ? 'فيديو' : 'صورة'}`}
+                            </h3>
+                          </div>
+                          <p className="text-xs text-zinc-400 mb-3" dir="rtl">
+                            ترتيب: {item.display_order} | {item.is_active ? 'نشط' : 'غير نشط'}
+                          </p>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleContentItemEdit(item)}
+                              className="flex-1 px-3 py-1.5 text-xs bg-green-500/20 hover:bg-green-500/30 text-green-400 rounded transition-colors"
+                            >
+                              تعديل
+                            </button>
+                            <button
+                              onClick={() => handleContentItemDelete(item.id)}
+                              className="px-3 py-1.5 text-xs bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded transition-colors"
+                            >
+                              حذف
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    ) : null}
                   </div>
                 </motion.div>
               </div>
