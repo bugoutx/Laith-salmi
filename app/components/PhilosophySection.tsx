@@ -75,7 +75,7 @@ export default function PhilosophySection() {
               transition={{ duration: 0.6, delay: 0.5 }}
               className="block"
             >
-              أؤمن أن الأسواق بطبيعتها متغيّرة،
+              أؤمن أن الأسواق بطبيعتها متطورة،
             </motion.span>
             <motion.span
               initial={{ opacity: 0 }}

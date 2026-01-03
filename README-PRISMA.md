@@ -62,3 +62,4 @@ The Prisma schema defines two models:
 2. The build process will automatically run `prisma generate` during build
 3. Run `npm run db:push` manually after first deployment to create tables
 
+

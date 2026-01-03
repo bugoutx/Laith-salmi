@@ -7,18 +7,20 @@ import ServicesSection from "./components/ServicesSection";
 import MethodologySection from "./components/MethodologySection";
 import FinalCTA from "./components/FinalCTA";
 import CandleDivider from "./components/CandleDivider";
+import IntroScreen from "./components/IntroScreen";
 
 export default function Home() {
   return (
     <main>
+      <IntroScreen />
       <Header />
       <Hero />
       <VideoSection />
       <CandleDivider />
-      <SocialProofSection />
+      <ServicesSection />
       <PhilosophySection />
       <CandleDivider />
-      <ServicesSection />
+      <SocialProofSection />
       <MethodologySection />
       <FinalCTA />
     </main>

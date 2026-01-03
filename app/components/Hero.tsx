@@ -66,7 +66,7 @@ export default function Hero() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-sm font-medium tracking-wide text-zinc-400 uppercase"
               >
-                Technical Analysis • Gold & Silver Markets
+                Technical Analysis • Commodities, Stocks & FX Markets
               </motion.p>
 
               {/* Main headline */}
@@ -91,8 +91,9 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.8 }}
                 className="text-base sm:text-lg md:text-xl leading-relaxed text-zinc-300"
+                dir="rtl"
               >
-                محلل تقني متخصص في أسواق الذهب والفضة، أقدم تحليلات دقيقة مبنية على الخبرة والمنهجية العلمية
+                التحليل الفني للمستثمرين، التجار، المضاربين، بما في ذلك صناديق التحوط، صناديق الاستثمار المشتركة، المستشارين الماليين والناس العاديين
               </motion.p>
 
               {/* Trust indicators */}
@@ -104,7 +105,7 @@ export default function Hero() {
               >
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0" />
-                  <span className="font-medium whitespace-nowrap">CFTe I Certified</span>
+                  <span className="font-medium whitespace-nowrap">CFTe</span>
                 </div>
                 <div className="hidden sm:block w-px h-4 bg-zinc-600" />
                 <div className="flex items-center gap-2">
@@ -114,7 +115,7 @@ export default function Hero() {
                 <div className="hidden sm:block w-px h-4 bg-zinc-600" />
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0" />
-                  <span className="font-medium whitespace-nowrap">Gold & Silver Specialist</span>
+                  <span className="font-medium whitespace-nowrap">Swing Trading Specialist</span>
                 </div>
               </motion.div>
 
@@ -169,6 +170,59 @@ export default function Hero() {
           />
         </motion.div>
       </div>
+
+      {/* Floating Quote - Bottom Center */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 1.6 }}
+        className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-40 w-full max-w-xl px-4"
+      >
+        <div className="relative bg-zinc-900/60 backdrop-blur-sm border border-zinc-800/50 rounded-lg p-3 sm:p-4 text-center" dir="rtl">
+          {/* Quote mark */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 1.7 }}
+            className="absolute -top-1 -right-2 text-xl text-green-500/30 font-serif leading-none"
+          >
+            "
+          </motion.div>
+
+          {/* Quote text */}
+          <motion.blockquote
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.8 }}
+            className="text-xs sm:text-sm font-light text-zinc-300 leading-relaxed mb-2 px-3"
+          >
+            أؤمن أن الأسواق بطبيعتها متطورة، وأن علم فهمها لا يقف عند حد، لذلك أحرص دائماً على التطور المستمر ومن يكون إلى جانبي في هذا المسار يواكب هذا التطور بوعي وانتقاء خالياً من الإزعاج.
+          </motion.blockquote>
+
+          {/* Closing quote mark */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 1.9 }}
+            className="absolute -bottom-1 -left-2 text-xl text-green-500/30 font-serif leading-none transform rotate-180"
+          >
+            "
+          </motion.div>
+
+          {/* Attribution */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 2.0 }}
+            className="mt-1"
+          >
+            <div className="w-6 h-px bg-gradient-to-r from-transparent via-green-500/50 to-transparent mx-auto mb-1" />
+            <p className="text-[10px] sm:text-xs text-zinc-400 font-medium">
+              — ليث السالمي
+            </p>
+          </motion.div>
+        </div>
+      </motion.div>
     </section>
   );
 }

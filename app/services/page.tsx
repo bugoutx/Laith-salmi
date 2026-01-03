@@ -164,7 +164,7 @@ export default function ServicesPage() {
                         }}
                         transition={{ duration: 0.6 }}
                       >
-                        {service.display_order.toString().padStart(2, '0')}
+                        {(service.display_order ?? index + 1).toString().padStart(2, '0')}
                       </motion.div>
 
                       {/* Content */}

@@ -28,7 +28,7 @@ export default function AboutPage() {
                 من أنا
               </h1>
               <p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed" dir="rtl">
-                تعرف على خبرتي ومسيرتي في عالم التحليل الفني وأسواق المعادن
+                تعرف على خبرتي ومسيرتي في عالم التحليل الفني والمتجارة في الاسواق المالية 
               </p>
             </motion.div>
 
@@ -77,22 +77,19 @@ export default function AboutPage() {
                 </div>
 
                 <div className="space-y-4 text-zinc-300 leading-relaxed">
-                  <p>
-                    محلل فني في الأسواق المالية ومتاجر متخصص في سوق المعادن، تحديدًا في الذهب والفضة، 
-                    بخبرة تتجاوز 6 سنوات.
+                  <p className="text-lg">
+                    محلل فني ومتداول متوسط الأجل في الأسواق المالية، متخصص في أسواق المعادن، الأسهم، والعملات الأجنبية.
                   </p>
                   
-                  <p>
-                    شملت خبرتي العمل في عدة جوانب داخل هذا القطاع، من بينها إدارة المحافظ المالية، 
-                    وتحليل الأسواق للمستثمرين، إضافة إلى أكثر من عامين من العمل المباشر مع مستثمرين 
-                    من أصحاب رؤوس الأموال الكبيرة في المتاجرة في أسواق المعادن.
+                  <p className="text-base text-zinc-400 italic">
+                    من أبرز هواياتي قراءة الأبحاث الفنية والرسوم البيانية بعمق.
                   </p>
                 </div>
 
                 {/* Credentials */}
                 <div className="flex flex-wrap gap-3 justify-end">
                   <div className="px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-lg">
-                    <span className="text-green-400 font-medium text-sm">CFTe I Certified</span>
+                    <span className="text-green-400 font-medium text-sm">CFTe</span>
                   </div>
                   <div className="px-4 py-2 bg-zinc-800/50 border border-zinc-700/30 rounded-lg">
                     <span className="text-zinc-300 font-medium text-sm">+6 سنوات خبرة</span>
@@ -285,7 +282,7 @@ export default function AboutPage() {
                           </p>
                           <p className="text-zinc-300 leading-relaxed text-base sm:text-lg">
                             المرونة هنا لا تعني التخبّط،
-                            بل تعني الالتزام بالمنهج بدل الالتزام بالرأي الشخصي.
+                            بل تعني الالتزام بما يقدمه السوق بدل الالتزام بالرأي الشخصي.
                           </p>
                         </div>
                       </div>

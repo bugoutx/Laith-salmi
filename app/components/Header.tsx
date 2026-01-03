@@ -35,8 +35,8 @@ export default function Header() {
 
   const navLinks = [
     { href: '/', label: 'الرئيسية' },
-    { href: '/about', label: 'من نحن' },
-    { href: '/services', label: 'الخدمات' },
+    { href: '/about', label: 'من أنا' },
+    { href: '/services', label: 'خدماتي' },
     { href: '/blog', label: 'المدونة' },
     { href: '/contact', label: 'اتصل بنا' },
   ];

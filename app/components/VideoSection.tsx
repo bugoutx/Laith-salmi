@@ -27,6 +27,7 @@ export default function VideoSection() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isAutoPlayPaused, setIsAutoPlayPaused] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // Fetch content items
@@ -65,6 +66,35 @@ export default function VideoSection() {
       });
     }
   }, [isInView, isDesktop, activeItemIndex, items]);
+
+  // Auto-swap slides every 5 seconds
+  useEffect(() => {
+    if (items.length <= 1 || !isInView || isAutoPlayPaused) return;
+
+    const interval = setInterval(() => {
+      setActiveItemIndex((prevIndex) => {
+        const nextIndex = (prevIndex + 1) % items.length;
+        // Reset video state when switching
+        setIsPlaying(false);
+        setProgress(0);
+        setCurrentTime(0);
+        return nextIndex;
+      });
+    }, 5000); // 5 seconds
+
+    return () => clearInterval(interval);
+  }, [items.length, isInView, isAutoPlayPaused]);
+
+  // Resume auto-play after 10 seconds of inactivity
+  useEffect(() => {
+    if (!isAutoPlayPaused) return;
+
+    const timeout = setTimeout(() => {
+      setIsAutoPlayPaused(false);
+    }, 10000); // Resume after 10 seconds
+
+    return () => clearTimeout(timeout);
+  }, [isAutoPlayPaused]);
 
   const handlePlayPause = useCallback(() => {
     if (videoRef.current && items[activeItemIndex]?.type === 'video') {
@@ -157,7 +187,11 @@ export default function VideoSection() {
               <div className="absolute inset-0 bg-green-500/5 rounded-2xl pointer-events-none" />
               
               {/* Video or Image element */}
-              <div className="relative aspect-video bg-black">
+              <div 
+                className="relative aspect-video bg-black"
+                onMouseEnter={() => setIsAutoPlayPaused(true)}
+                onMouseLeave={() => setIsAutoPlayPaused(false)}
+              >
                 {currentItem.type === 'video' ? (
                   <>
                     <video
@@ -168,8 +202,12 @@ export default function VideoSection() {
                       playsInline
                       onTimeUpdate={handleTimeUpdate}
                       onLoadedMetadata={handleLoadedMetadata}
-                      onPlay={() => setIsPlaying(true)}
+                      onPlay={() => {
+                        setIsPlaying(true);
+                        setIsAutoPlayPaused(true);
+                      }}
                       onPause={() => setIsPlaying(false)}
+                      onClick={() => setIsAutoPlayPaused(true)}
                       aria-label={currentItem.title || 'Video content'}
                     >
                       <source src={currentItem.mediaUrl} type="video/mp4" />
@@ -218,6 +256,7 @@ export default function VideoSection() {
                     fill
                     className="object-cover"
                     priority
+                    onClick={() => setIsAutoPlayPaused(true)}
                   />
                 )}
               </div>
@@ -234,7 +273,10 @@ export default function VideoSection() {
                       setIsPlaying(false);
                       setProgress(0);
                       setCurrentTime(0);
+                      setIsAutoPlayPaused(true); // Pause auto-play when user manually selects
                     }}
+                    onMouseEnter={() => setIsAutoPlayPaused(true)} // Pause on hover
+                    onMouseLeave={() => setIsAutoPlayPaused(false)} // Resume on leave
                     className={`h-2 rounded-full transition-all duration-300 ${
                       index === activeItemIndex 
                         ? 'w-8 bg-green-500' 

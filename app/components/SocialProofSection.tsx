@@ -11,25 +11,29 @@ export default function SocialProofSection() {
     {
       id: 'experience',
       title: 'خبرة عملية',
-      content: 'أكثر من 6 سنوات في تحليل الأسواق المالية ومتاجرة المعادن',
+      years: '+6Y',
+      content: 'في تحليل الأسواق المالية والتداول في المعادن',
       accent: 'line'
     },
     {
       id: 'certification',
       title: 'CFTe I - IFTA',
-      content: 'شهادة المحلل الفني المعتمد من الاتحاد الدولي للمحللين الفنيين',
+      years: '+1Y',
+      content: 'اجتياز اختبار المستوى الأول من شهادة المحلل الفني المعتمد من الاتحاد الدولي للمحللين الفنيين',
       accent: 'border'
     },
     {
       id: 'portfolio',
-      title: 'إدارة محافظ',
-      content: 'العمل المباشر مع مستثمرين من أصحاب رؤوس الأموال الكبيرة',
+      title: 'إدارة المحافظ',
+      years: '2Y+',
+      content: 'خبرة سابقة في إدارة المحافظ المالية للمستثمرين',
       accent: 'dot'
     },
     {
-      id: 'specialization',
-      title: 'تخصص عميق',
-      content: 'متخصص في أسواق الذهب والفضة مع منهجية متكاملة',
+      id: 'monitoring',
+      title: 'متابعة مباشرة مع مستثمرين',
+      years: '2Y+',
+      content: 'تقديم تقارير وأحداثيات أسبوعية لأصحاب رؤوس الأموال الكبيرة عن ما يقدمه السوق من فرص وأدلة',
       accent: 'line'
     }
   ];
@@ -91,7 +95,7 @@ export default function SocialProofSection() {
             className="text-lg text-zinc-400 max-w-2xl mx-auto"
             dir="rtl"
           >
-            المسؤولية والانضباط في كل قرار استثماري
+            المسؤولية والانضباط في كل خطوة عمل
           </motion.p>
         </motion.div>
 
@@ -127,9 +131,14 @@ export default function SocialProofSection() {
 
                 {/* Card content */}
                 <div className="space-y-3 text-right" dir="rtl">
-                  <h3 className="text-lg font-semibold text-zinc-200">
-                    {card.title}
-                  </h3>
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 className="text-lg font-semibold text-zinc-200">
+                      {card.title}
+                    </h3>
+                    <span className="text-green-400 font-bold text-lg whitespace-nowrap">
+                      {card.years}
+                    </span>
+                  </div>
                   <p className="text-sm leading-relaxed text-zinc-400">
                     {card.content}
                   </p>
