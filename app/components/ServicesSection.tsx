@@ -1,48 +1,45 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
+
+interface Service {
+  id: string;
+  title: string;
+  subtitle: string | null;
+  description: string;
+  valueProposition: string | null;
+  displayOrder: number;
+  isActive: boolean;
+}
 
 export default function ServicesSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
-  const [expandedCard, setExpandedCard] = useState<string | null>(null);
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const services = [
-    {
-      id: 'technical-skills',
-      number: '01',
-      title: 'مهارة التحليل الفني',
-      subtitle: 'بناء المسار المهني',
-      description: 'أقدّم لك مهارة التحليل الفني من أساسها الصحيح، لتصبح قادرًا على قراءة السوق والفرص بنفسك، وبناء قراراتك بوضوح، بعيدًا عن الإزعاج وتضارب الآراء الخارجية.',
-      value: 'امتلاك أداة فكرية ومهارية يمكنك البناء عليها كمسار طويل المدى في الأسواق المالية.'
-    },
-    {
-      id: 'metals-methodology',
-      number: '02', 
-      title: 'منهجية تأهيل تاجر المعادن',
-      subtitle: 'نهج متكامل ومتخصص',
-      description: 'أعمل على نقل خبرتي العملية في أسواق المعادن، وتحويلها إلى منهجية متكاملة لتأهيلك كتاجر معادن، من فهم حركة أسعار المعادن، وإدارة المخاطر، وصولًا إلى كيفية اتخاذ القرار بثبات وهدوء.',
-      value: 'منهج واضح ومتكامل، لا يحتاج بعده إلى تعدد أساليب أو مصادر، بل يركّز على التطبيق الواعي والاستمرارية.'
-    },
-    {
-      id: 'mentoring',
-      number: '03',
-      title: 'التوجيه والمتابعة المباشرة',
-      subtitle: 'حتى الوصول للهدف',
-      description: 'أقدّم حصص تقوية مباشرة تُبنى على احتياجك الفعلي، نُعالج فيها نقاط الضعف، ونُعزّز الجوانب التي تحتاجها في مرحلتك الحالية، مع إمكانية المتابعة المباشرة بعد الجلسات حتى الوصول إلى هدفك.',
-      value: 'أنت لا تُترك بعد الجلسة، بل تُوجَّه حتى يتحقق الفهم والتطبيق العملي.'
-    },
-    {
-      id: 'investor-partnership',
-      number: '04',
-      title: 'شراكة واعية مع المستثمر',
-      subtitle: 'عقلية استثمارية مستدامة',
-      description: 'للمستثمرين، أقدّم متابعة مباشرة مبنية على شرح مبسّط لما يقدّمه السوق من أدلة، وما يمكن أن يترتب عليها من سيناريوهات محتملة، بعيدًا عن ردّات الفعل والقرارات العشوائية.',
-      value: 'تعامل احترافي مع السوق بعقلية استثمارية هادئة ومستدامة.'
+  useEffect(() => {
+    async function fetchServices() {
+      try {
+        const response = await fetch('/api/services');
+        if (!response.ok) {
+          throw new Error('Failed to fetch services');
+        }
+        const data = await response.json();
+        setServices(data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching services:', err);
+        setError('فشل تحميل الخدمات');
+        setLoading(false);
+      }
     }
-  ];
+
+    fetchServices();
+  }, []);
 
   return (
     <section 
@@ -129,113 +126,134 @@ export default function ServicesSection() {
         </motion.div>
 
         {/* Services Grid - Compact Design */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
-          {services.map((service, index) => (
-            <motion.div
-              key={service.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ 
-                duration: 0.6, 
-                delay: 0.6 + (index * 0.1),
-                ease: [0.25, 0.1, 0.25, 1]
-              }}
-              className="group relative"
-              onMouseEnter={() => setHoveredCard(service.id)}
-              onMouseLeave={() => setHoveredCard(null)}
-            >
-              {/* Compact Card */}
-              <motion.div
-                className="relative h-full p-5 rounded-2xl bg-zinc-900/50 backdrop-blur-sm border border-zinc-800/50 overflow-hidden"
-                animate={{
-                  borderColor: hoveredCard === service.id ? 'rgba(34, 197, 94, 0.4)' : 'rgba(39, 39, 42, 0.5)',
-                  y: hoveredCard === service.id ? -4 : 0,
-                }}
-                transition={{ duration: 0.3 }}
-              >
-                
-                {/* Top accent bar */}
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="text-zinc-400">جاري التحميل...</div>
+          </div>
+        ) : error ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="text-red-400">{error}</div>
+          </div>
+        ) : services.length === 0 ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="text-zinc-400">لا توجد خدمات متاحة</div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
+            {services.map((service, index) => {
+              const number = String(service.displayOrder || index + 1).padStart(2, '0');
+              return (
                 <motion.div
-                  className="absolute top-0 left-0 right-0 h-1 bg-green-500"
-                  initial={{ scaleX: 0 }}
-                  animate={{
-                    scaleX: hoveredCard === service.id ? 1 : 0.3,
+                  key={service.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                  transition={{ 
+                    duration: 0.6, 
+                    delay: 0.6 + (index * 0.1),
+                    ease: [0.25, 0.1, 0.25, 1]
                   }}
-                  transition={{ duration: 0.4 }}
-                  style={{ transformOrigin: 'right' }}
-                />
-
-                {/* Content */}
-                <div className="relative z-10 text-right space-y-4" dir="rtl">
-                  
-                  {/* Number */}
-                  <div className="flex items-center justify-between">
-                    <motion.div
-                      className="w-10 h-10 bg-green-500/15 rounded-lg flex items-center justify-center"
-                      animate={{
-                        backgroundColor: hoveredCard === service.id ? 'rgba(34, 197, 94, 0.25)' : 'rgba(34, 197, 94, 0.15)',
-                      }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <span className="text-lg font-bold text-green-400">{service.number}</span>
-                    </motion.div>
+                  className="group relative"
+                  onMouseEnter={() => setHoveredCard(service.id)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                >
+                  {/* Compact Card */}
+                  <motion.div
+                    className="relative h-full p-5 rounded-2xl bg-zinc-900/50 backdrop-blur-sm border border-zinc-800/50 overflow-hidden"
+                    animate={{
+                      borderColor: hoveredCard === service.id ? 'rgba(34, 197, 94, 0.4)' : 'rgba(39, 39, 42, 0.5)',
+                      y: hoveredCard === service.id ? -4 : 0,
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
                     
-                    {/* Status indicator */}
+                    {/* Top accent bar */}
                     <motion.div
-                      className="w-2 h-2 rounded-full bg-green-500"
+                      className="absolute top-0 left-0 right-0 h-1 bg-green-500"
+                      initial={{ scaleX: 0 }}
                       animate={{
-                        scale: hoveredCard === service.id ? [1, 1.3, 1] : 1,
-                        opacity: hoveredCard === service.id ? [1, 0.5, 1] : 0.5,
+                        scaleX: hoveredCard === service.id ? 1 : 0.3,
                       }}
-                      transition={{ duration: 1, repeat: hoveredCard === service.id ? Infinity : 0 }}
+                      transition={{ duration: 0.4 }}
+                      style={{ transformOrigin: 'right' }}
                     />
-                  </div>
 
-                  {/* Title */}
-                  <div>
-                    <motion.h3
-                      className="text-lg font-bold text-zinc-50 mb-1.5 leading-tight"
+                    {/* Content */}
+                    <div className="relative z-10 text-right space-y-4" dir="rtl">
+                      
+                      {/* Number */}
+                      <div className="flex items-center justify-between">
+                        <motion.div
+                          className="w-10 h-10 bg-green-500/15 rounded-lg flex items-center justify-center"
+                          animate={{
+                            backgroundColor: hoveredCard === service.id ? 'rgba(34, 197, 94, 0.25)' : 'rgba(34, 197, 94, 0.15)',
+                          }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <span className="text-lg font-bold text-green-400">{number}</span>
+                        </motion.div>
+                        
+                        {/* Status indicator */}
+                        <motion.div
+                          className="w-2 h-2 rounded-full bg-green-500"
+                          animate={{
+                            scale: hoveredCard === service.id ? [1, 1.3, 1] : 1,
+                            opacity: hoveredCard === service.id ? [1, 0.5, 1] : 0.5,
+                          }}
+                          transition={{ duration: 1, repeat: hoveredCard === service.id ? Infinity : 0 }}
+                        />
+                      </div>
+
+                      {/* Title */}
+                      <div>
+                        <motion.h3
+                          className="text-lg font-bold text-zinc-50 mb-1.5 leading-tight"
+                          animate={{
+                            color: hoveredCard === service.id ? '#4ade80' : '#fafafa',
+                          }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          {service.title}
+                        </motion.h3>
+                        {service.subtitle && (
+                          <p className="text-xs text-green-500/80 font-medium">
+                            {service.subtitle}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Divider */}
+                      <div className="h-px bg-zinc-800" />
+
+                      {/* Description - Truncated */}
+                      <p className="text-sm text-zinc-400 leading-relaxed line-clamp-3">
+                        {service.description}
+                      </p>
+
+                      {/* Value tag */}
+                      {service.valueProposition && (
+                        <div className="pt-2">
+                          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-zinc-800/50 rounded-lg border border-zinc-700/50">
+                            <div className="w-1.5 h-1.5 bg-green-400 rounded-full" />
+                            <span className="text-xs text-zinc-400 line-clamp-1">{service.valueProposition}</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Hover overlay */}
+                    <motion.div
+                      className="absolute inset-0 bg-green-500/5 pointer-events-none"
                       animate={{
-                        color: hoveredCard === service.id ? '#4ade80' : '#fafafa',
+                        opacity: hoveredCard === service.id ? 1 : 0,
                       }}
                       transition={{ duration: 0.3 }}
-                    >
-                      {service.title}
-                    </motion.h3>
-                    <p className="text-xs text-green-500/80 font-medium">
-                      {service.subtitle}
-                    </p>
-                  </div>
-
-                  {/* Divider */}
-                  <div className="h-px bg-zinc-800" />
-
-                  {/* Description - Truncated */}
-                  <p className="text-sm text-zinc-400 leading-relaxed line-clamp-3">
-                    {service.description}
-                  </p>
-
-                  {/* Value tag */}
-                  <div className="pt-2">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-zinc-800/50 rounded-lg border border-zinc-700/50">
-                      <div className="w-1.5 h-1.5 bg-green-400 rounded-full" />
-                      <span className="text-xs text-zinc-400">قيمة مضافة</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Hover overlay */}
-                <motion.div
-                  className="absolute inset-0 bg-green-500/5 pointer-events-none"
-                  animate={{
-                    opacity: hoveredCard === service.id ? 1 : 0,
-                  }}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.div>
-            </motion.div>
-          ))}
-        </div>
+                    />
+                  </motion.div>
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
 
         {/* Bottom CTA */}
         <motion.div

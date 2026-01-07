@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Header from '../components/Header';
+import VideoSection from '../components/VideoSection';
 
 export default function AboutPage() {
   return (
@@ -230,7 +231,7 @@ export default function AboutPage() {
                         </motion.div>
                         <div className="flex-1 space-y-4">
                           <h3 className="text-xl sm:text-2xl font-bold text-green-400">
-                            منهجية وزن الأدلة والمرونة في قراءة السوق
+                          منهجية وزن الأدلة
                           </h3>
                           <p className="text-zinc-300 leading-relaxed text-base sm:text-lg">
                             يتميّز أسلوب ليث بالاعتماد على منهجية وزن الأدلة (Weight of Evidence)،
@@ -297,7 +298,7 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.5 }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
+              className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-7 gap-6 mb-16"
             >
               <div className="p-6 rounded-xl bg-zinc-900/40 backdrop-blur-sm border border-zinc-800/50 text-center">
                 <div className="text-3xl font-bold text-green-400 mb-2">+6</div>
@@ -313,7 +314,30 @@ export default function AboutPage() {
                 <div className="text-3xl font-bold text-green-400 mb-2">CFTe I</div>
                 <div className="text-zinc-300 font-medium" dir="rtl">شهادة معتمدة</div>
               </div>
+              
+              <div className="p-6 rounded-xl bg-zinc-900/40 backdrop-blur-sm border border-zinc-800/50 text-center">
+                <div className="text-3xl font-bold text-green-400 mb-2">100%</div>
+                <div className="text-zinc-300 font-medium" dir="rtl">التزام</div>
+              </div>
+              
+              <div className="p-6 rounded-xl bg-zinc-900/40 backdrop-blur-sm border border-zinc-800/50 text-center">
+                <div className="text-3xl font-bold text-green-400 mb-2">24/7</div>
+                <div className="text-zinc-300 font-medium" dir="rtl">دعم</div>
+              </div>
+              
+              <div className="p-6 rounded-xl bg-zinc-900/40 backdrop-blur-sm border border-zinc-800/50 text-center">
+                <div className="text-3xl font-bold text-green-400 mb-2">500+</div>
+                <div className="text-zinc-300 font-medium" dir="rtl">عميل</div>
+              </div>
+              
+              <div className="p-6 rounded-xl bg-zinc-900/40 backdrop-blur-sm border border-zinc-800/50 text-center">
+                <div className="text-3xl font-bold text-green-400 mb-2">95%</div>
+                <div className="text-zinc-300 font-medium" dir="rtl">رضا العملاء</div>
+              </div>
             </motion.div>
+
+            {/* Video Section */}
+            <VideoSection />
 
             {/* Philosophy Quote */}
             <motion.div

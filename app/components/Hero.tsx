@@ -102,6 +102,7 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 1.0 }}
                 className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm text-zinc-400"
+                dir="ltr"
               >
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0" />

@@ -1,6 +1,5 @@
 import Header from "./components/Header";
 import Hero from "./components/Hero";
-import VideoSection from "./components/VideoSection";
 import SocialProofSection from "./components/SocialProofSection";
 import PhilosophySection from "./components/PhilosophySection";
 import ServicesSection from "./components/ServicesSection";
@@ -15,7 +14,6 @@ export default function Home() {
       <IntroScreen />
       <Header />
       <Hero />
-      <VideoSection />
       <CandleDivider />
       <ServicesSection />
       <PhilosophySection />

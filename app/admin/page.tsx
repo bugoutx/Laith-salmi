@@ -667,6 +667,7 @@ export default function AdminPanel() {
                           className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-zinc-50 focus:outline-none focus:border-green-500"
                         >
                           <option>تحليل فني</option>
+                          <option>تحليل السوق</option>
                           <option>أسواق الذهب</option>
                           <option>أسواق الفضة</option>
                           <option>إدارة المخاطر</option>
