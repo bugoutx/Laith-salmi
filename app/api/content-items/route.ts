@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
       data: {
         id,
         type: data.type,
-        mediaUrl: data.media_url || data.mediaUrl,
+        mediaUrl: (data.media_url || data.mediaUrl)?.trim() || null,
         title: data.title || null,
         subtitle: data.subtitle || null,
         description: data.description || null,
@@ -66,7 +66,7 @@ export async function PUT(request: NextRequest) {
       where: { id: updatedItem.id },
       data: {
         type: updatedItem.type,
-        mediaUrl: updatedItem.media_url || updatedItem.mediaUrl,
+        mediaUrl: (updatedItem.media_url || updatedItem.mediaUrl)?.trim() || null,
         title: updatedItem.title || null,
         subtitle: updatedItem.subtitle || null,
         description: updatedItem.description || null,

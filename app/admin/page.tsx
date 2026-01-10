@@ -834,7 +834,7 @@ export default function AdminPanel() {
                       {/* Media Upload */}
                       <div>
                         <label className="block text-sm font-medium text-zinc-300 mb-2">
-                          {contentFormData.type === 'video' ? 'الفيديو' : 'الصورة'}
+                          {contentFormData.type === 'video' ? 'الفيديو' : 'الصورة'} <span className="text-zinc-500 text-xs">(اختياري)</span>
                         </label>
                         <div className="space-y-4">
                           {/* Media Preview */}
@@ -881,7 +881,7 @@ export default function AdminPanel() {
                             </label>
                             <input
                               type="text"
-                              placeholder="أو أدخل رابط الملف"
+                              placeholder="أو أدخل رابط الملف (اختياري)"
                               value={contentFormData.media_url}
                               onChange={(e) => {
                                 setContentFormData({ ...contentFormData, media_url: e.target.value });
@@ -892,8 +892,8 @@ export default function AdminPanel() {
                           </div>
                           <p className="text-xs text-zinc-500">
                             {contentFormData.type === 'video' 
-                              ? 'الحد الأقصى لحجم الملف: 50 ميجابايت | الصيغ المدعومة: MP4, WebM, OGG'
-                              : 'الحد الأقصى لحجم الملف: 5 ميجابايت | الصيغ المدعومة: JPEG, PNG, WebP'}
+                              ? 'الحد الأقصى لحجم الملف: 50 ميجابايت | الصيغ المدعومة: MP4, WebM, OGG | يمكنك ترك هذا الحقل فارغاً لعرض النص فقط'
+                              : 'الحد الأقصى لحجم الملف: 5 ميجابايت | الصيغ المدعومة: JPEG, PNG, WebP | يمكنك ترك هذا الحقل فارغاً لعرض النص فقط'}
                           </p>
                         </div>
                       </div>

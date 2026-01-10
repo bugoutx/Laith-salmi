@@ -7,7 +7,7 @@ import Image from 'next/image';
 interface ContentItem {
   id: string;
   type: 'video' | 'image';
-  mediaUrl: string;
+  mediaUrl?: string | null;
   title?: string | null;
   subtitle?: string | null;
   description?: string | null;
@@ -139,6 +139,7 @@ export default function VideoSection() {
   }, [duration]);
 
   const currentItem = items[activeItemIndex];
+  const hasMedia = currentItem?.mediaUrl && currentItem.mediaUrl.trim() !== '';
 
   if (loading) {
     return (
@@ -173,128 +174,130 @@ export default function VideoSection() {
 
       {/* Content container */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className={`grid grid-cols-1 ${hasMedia ? 'lg:grid-cols-2' : ''} gap-12 lg:gap-16 items-center`}>
           
-          {/* Media Container - Left side on desktop, after content on mobile */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.98 }}
-            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-            className="w-full order-2 lg:order-1"
-          >
-            <div className="relative rounded-2xl overflow-hidden bg-black/40 border border-green-500/10 shadow-2xl">
-              {/* Subtle green glow */}
-              <div className="absolute inset-0 bg-green-500/5 rounded-2xl pointer-events-none" />
-              
-              {/* Video or Image element */}
-              <div 
-                className="relative aspect-video bg-black"
-                onMouseEnter={() => setIsAutoPlayPaused(true)}
-                onMouseLeave={() => setIsAutoPlayPaused(false)}
-              >
-                {currentItem.type === 'video' ? (
-                  <>
-                    <video
-                      ref={videoRef}
-                      key={currentItem.mediaUrl}
-                      className="w-full h-full object-cover"
-                      muted
-                      playsInline
-                      onTimeUpdate={handleTimeUpdate}
-                      onLoadedMetadata={handleLoadedMetadata}
-                      onPlay={() => {
-                        setIsPlaying(true);
-                        setIsAutoPlayPaused(true);
-                      }}
-                      onPause={() => setIsPlaying(false)}
+          {/* Media Container - Only show if media exists */}
+          {hasMedia && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+              className="w-full order-2 lg:order-1"
+            >
+              <div className="relative rounded-2xl overflow-hidden bg-black/40 border border-green-500/10 shadow-2xl">
+                {/* Subtle green glow */}
+                <div className="absolute inset-0 bg-green-500/5 rounded-2xl pointer-events-none" />
+                
+                {/* Video or Image element */}
+                <div 
+                  className="relative aspect-video bg-black"
+                  onMouseEnter={() => setIsAutoPlayPaused(true)}
+                  onMouseLeave={() => setIsAutoPlayPaused(false)}
+                >
+                  {currentItem.type === 'video' ? (
+                    <>
+                      <video
+                        ref={videoRef}
+                        key={currentItem.mediaUrl}
+                        className="w-full h-full object-cover"
+                        muted
+                        playsInline
+                        onTimeUpdate={handleTimeUpdate}
+                        onLoadedMetadata={handleLoadedMetadata}
+                        onPlay={() => {
+                          setIsPlaying(true);
+                          setIsAutoPlayPaused(true);
+                        }}
+                        onPause={() => setIsPlaying(false)}
+                        onClick={() => setIsAutoPlayPaused(true)}
+                        aria-label={currentItem.title || 'Video content'}
+                      >
+                        <source src={currentItem.mediaUrl} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+
+                      {/* Custom controls overlay */}
+                      <div className={`absolute inset-0 flex items-center justify-center transition-colors duration-300 ${!isPlaying ? 'bg-black/0 hover:bg-black/20' : 'bg-transparent hover:bg-black/10'}`}>
+                        {(!isPlaying || !isDesktop) && (
+                          <button
+                            onClick={handlePlayPause}
+                            className="w-16 h-16 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-green-500/50"
+                            aria-label={isPlaying ? 'Pause video' : 'Play video'}
+                          >
+                            {isPlaying ? (
+                              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+                              </svg>
+                            ) : (
+                              <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z" />
+                              </svg>
+                            )}
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Progress bar */}
+                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-zinc-800/50 cursor-pointer" onClick={handleProgressClick}>
+                        <motion.div
+                          className="h-full bg-green-500"
+                          style={{ width: `${progress}%` }}
+                          transition={{ duration: 0.1 }}
+                        />
+                      </div>
+
+                      {/* Time display */}
+                      <div className="absolute bottom-2 right-3 text-xs text-zinc-400 font-mono">
+                        {formatTime(currentTime)} / {formatTime(duration)}
+                      </div>
+                    </>
+                  ) : (
+                    <Image
+                      src={currentItem.mediaUrl}
+                      alt={currentItem.title || 'Content image'}
+                      fill
+                      className="object-cover"
+                      priority
                       onClick={() => setIsAutoPlayPaused(true)}
-                      aria-label={currentItem.title || 'Video content'}
-                    >
-                      <source src={currentItem.mediaUrl} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-
-                    {/* Custom controls overlay */}
-                    <div className={`absolute inset-0 flex items-center justify-center transition-colors duration-300 ${!isPlaying ? 'bg-black/0 hover:bg-black/20' : 'bg-transparent hover:bg-black/10'}`}>
-                      {(!isPlaying || !isDesktop) && (
-                        <button
-                          onClick={handlePlayPause}
-                          className="w-16 h-16 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-green-500/50"
-                          aria-label={isPlaying ? 'Pause video' : 'Play video'}
-                        >
-                          {isPlaying ? (
-                            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
-                            </svg>
-                          ) : (
-                            <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M8 5v14l11-7z" />
-                            </svg>
-                          )}
-                        </button>
-                      )}
-                    </div>
-
-                    {/* Progress bar */}
-                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-zinc-800/50 cursor-pointer" onClick={handleProgressClick}>
-                      <motion.div
-                        className="h-full bg-green-500"
-                        style={{ width: `${progress}%` }}
-                        transition={{ duration: 0.1 }}
-                      />
-                    </div>
-
-                    {/* Time display */}
-                    <div className="absolute bottom-2 right-3 text-xs text-zinc-400 font-mono">
-                      {formatTime(currentTime)} / {formatTime(duration)}
-                    </div>
-                  </>
-                ) : (
-                  <Image
-                    src={currentItem.mediaUrl}
-                    alt={currentItem.title || 'Content image'}
-                    fill
-                    className="object-cover"
-                    priority
-                    onClick={() => setIsAutoPlayPaused(true)}
-                  />
-                )}
+                    />
+                  )}
+                </div>
               </div>
-            </div>
 
-            {/* Item indicators if multiple items */}
-            {items.length > 1 && (
-              <div className="flex justify-center gap-2 mt-4">
-                {items.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => {
-                      setActiveItemIndex(index);
-                      setIsPlaying(false);
-                      setProgress(0);
-                      setCurrentTime(0);
-                      setIsAutoPlayPaused(true); // Pause auto-play when user manually selects
-                    }}
-                    onMouseEnter={() => setIsAutoPlayPaused(true)} // Pause on hover
-                    onMouseLeave={() => setIsAutoPlayPaused(false)} // Resume on leave
-                    className={`h-2 rounded-full transition-all duration-300 ${
-                      index === activeItemIndex 
-                        ? 'w-8 bg-green-500' 
-                        : 'w-2 bg-zinc-600 hover:bg-zinc-500'
-                    }`}
-                    aria-label={`Go to item ${index + 1}`}
-                  />
-                ))}
-              </div>
-            )}
-          </motion.div>
+              {/* Item indicators if multiple items */}
+              {items.length > 1 && (
+                <div className="flex justify-center gap-2 mt-4">
+                  {items.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setActiveItemIndex(index);
+                        setIsPlaying(false);
+                        setProgress(0);
+                        setCurrentTime(0);
+                        setIsAutoPlayPaused(true); // Pause auto-play when user manually selects
+                      }}
+                      onMouseEnter={() => setIsAutoPlayPaused(true)} // Pause on hover
+                      onMouseLeave={() => setIsAutoPlayPaused(false)} // Resume on leave
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        index === activeItemIndex 
+                          ? 'w-8 bg-green-500' 
+                          : 'w-2 bg-zinc-600 hover:bg-zinc-500'
+                      }`}
+                      aria-label={`Go to item ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
 
-          {/* Text Content - Right side on desktop, first on mobile */}
+          {/* Text Content - Right side on desktop, first on mobile, centered if no media */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-            className="w-full order-1 lg:order-2 space-y-6 text-right lg:text-right"
+            className={`w-full ${hasMedia ? 'order-1 lg:order-2' : ''} space-y-6 ${hasMedia ? 'text-right lg:text-right' : 'text-center max-w-4xl mx-auto'} ${!hasMedia ? 'lg:col-span-1' : ''}`}
             dir="rtl"
           >
             {/* Eyebrow text */}
@@ -339,10 +342,34 @@ export default function VideoSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
-                className="text-lg sm:text-xl leading-relaxed text-zinc-300 max-w-2xl lg:ms-auto"
+                className={`text-lg sm:text-xl leading-relaxed text-zinc-300 max-w-2xl ${hasMedia ? 'lg:ms-auto' : 'mx-auto'}`}
               >
                 {currentItem.description}
               </motion.p>
+            )}
+            
+            {/* Item indicators if multiple items and no media */}
+            {!hasMedia && items.length > 1 && (
+              <div className="flex justify-center gap-2 mt-6">
+                {items.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setActiveItemIndex(index);
+                      setIsPlaying(false);
+                      setProgress(0);
+                      setCurrentTime(0);
+                      setIsAutoPlayPaused(true);
+                    }}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      index === activeItemIndex 
+                        ? 'w-8 bg-green-500' 
+                        : 'w-2 bg-zinc-600 hover:bg-zinc-500'
+                    }`}
+                    aria-label={`Go to item ${index + 1}`}
+                  />
+                ))}
+              </div>
             )}
           </motion.div>
         </div>

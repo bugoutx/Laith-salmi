@@ -55,15 +55,90 @@ export default function Hero() {
       {/* 5. Main content layer - Highest layer */}
       <div className="relative z-30 flex min-h-screen items-center px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 lg:pt-0">
         <div className="w-full lg:w-1/2 lg:me-auto max-w-3xl">
-          <div className="w-full">
+          <div className="w-full flex flex-col">
             
-            {/* Content Side - Right side (opposite of image on desktop) */}
-            <div className="text-right space-y-6 sm:space-y-8 lg:pr-12 relative z-30">
+            {/* Mobile Image - First on mobile, hidden on desktop */}
+            <div className="lg:hidden relative z-20 w-full mb-8 order-1">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="relative w-full h-80 sm:h-96 rounded-2xl overflow-hidden bg-gradient-radial from-zinc-900 via-zinc-950 to-black"
+              >
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10" />
+                
+                {/* The actual image */}
+                <Image
+                  src="/laith2.png"
+                  alt="Laith Salmi - Technical Analyst"
+                  fill
+                  className="object-cover object-center"
+                  priority
+                />
+              </motion.div>
+            </div>
+
+            {/* Mobile Quote - After image on mobile, hidden on desktop */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="lg:hidden relative z-20 w-full mb-8 order-2"
+            >
+              <div className="relative bg-zinc-900/60 backdrop-blur-sm border border-zinc-800/50 rounded-lg p-3 sm:p-4 text-center" dir="rtl">
+                {/* Quote mark */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                  className="absolute -top-1 -right-2 text-xl text-green-500/30 font-serif leading-none"
+                >
+                  "
+                </motion.div>
+
+                {/* Quote text */}
+                <motion.blockquote
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.6 }}
+                  className="text-xs sm:text-sm font-light text-zinc-300 leading-relaxed mb-2 px-3"
+                >
+                  أؤمن أن الأسواق بطبيعتها متطورة، وأن علم فهمها لا يقف عند حد، لذلك أحرص دائماً على التطور المستمر ومن يكون إلى جانبي في هذا المسار يواكب هذا التطور بوعي وانتقاء خالياً من الإزعاج.
+                </motion.blockquote>
+
+                {/* Closing quote mark */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.7 }}
+                  className="absolute -bottom-1 -left-2 text-xl text-green-500/30 font-serif leading-none transform rotate-180"
+                >
+                  "
+                </motion.div>
+
+                {/* Attribution */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.6, delay: 0.8 }}
+                  className="mt-1"
+                >
+                  <div className="w-6 h-px bg-gradient-to-r from-transparent via-green-500/50 to-transparent mx-auto mb-1" />
+                  <p className="text-[10px] sm:text-xs text-zinc-400 font-medium">
+                    — ليث السالمي
+                  </p>
+                </motion.div>
+              </div>
+            </motion.div>
+            
+            {/* Content Side - Right side (opposite of image on desktop), order-3 on mobile */}
+            <div className="text-right space-y-6 sm:space-y-8 lg:pr-12 relative z-30 order-3 lg:order-1">
               {/* Eyebrow text */}
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
                 className="text-sm font-medium tracking-wide text-zinc-400 uppercase"
               >
                 Technical Analysis • Commodities, Stocks & FX Markets
@@ -73,7 +148,7 @@ export default function Hero() {
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
                 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-zinc-50"
                 dir="rtl"
               >
@@ -89,7 +164,7 @@ export default function Hero() {
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.8 }}
+                transition={{ duration: 0.6, delay: 1.0 }}
                 className="text-base sm:text-lg md:text-xl leading-relaxed text-zinc-300"
                 dir="rtl"
               >
@@ -100,7 +175,7 @@ export default function Hero() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 1.0 }}
+                transition={{ duration: 0.6, delay: 1.2 }}
                 className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm text-zinc-400"
                 dir="ltr"
               >
@@ -124,7 +199,7 @@ export default function Hero() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 1.2 }}
+                transition={{ duration: 0.6, delay: 1.4 }}
                 className="flex flex-col sm:flex-row gap-3 sm:gap-4"
               >
                 {/* Primary CTA */}
@@ -150,34 +225,12 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Mobile Image - After CTA, requires scrolling */}
-      <div className="lg:hidden relative z-20 w-full px-4 sm:px-6 pb-12">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.4 }}
-          className="relative w-full h-80 sm:h-96 rounded-2xl overflow-hidden bg-gradient-radial from-zinc-900 via-zinc-950 to-black"
-        >
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10" />
-          
-          {/* The actual image */}
-          <Image
-            src="/laith2.png"
-            alt="Laith Salmi - Technical Analyst"
-            fill
-            className="object-cover object-center"
-            priority
-          />
-        </motion.div>
-      </div>
-
-      {/* Floating Quote - Bottom Center */}
+      {/* Desktop Quote - Bottom Center (only visible on desktop) */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 1.6 }}
-        className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-40 w-full max-w-xl px-4"
+        className="hidden lg:block absolute bottom-6 left-1/2 transform -translate-x-1/2 z-40 w-full max-w-xl px-4"
       >
         <div className="relative bg-zinc-900/60 backdrop-blur-sm border border-zinc-800/50 rounded-lg p-3 sm:p-4 text-center" dir="rtl">
           {/* Quote mark */}
