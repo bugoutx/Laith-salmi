@@ -198,7 +198,7 @@ export default function VideoSection() {
                     <>
                       <video
                         ref={videoRef}
-                        key={currentItem.mediaUrl}
+                        key={currentItem.mediaUrl || ''}
                         className="w-full h-full object-cover"
                         muted
                         playsInline
@@ -212,7 +212,7 @@ export default function VideoSection() {
                         onClick={() => setIsAutoPlayPaused(true)}
                         aria-label={currentItem.title || 'Video content'}
                       >
-                        <source src={currentItem.mediaUrl} type="video/mp4" />
+                        <source src={currentItem.mediaUrl || ''} type="video/mp4" />
                         Your browser does not support the video tag.
                       </video>
 
@@ -253,7 +253,7 @@ export default function VideoSection() {
                     </>
                   ) : (
                     <Image
-                      src={currentItem.mediaUrl}
+                      src={currentItem.mediaUrl || ''}
                       alt={currentItem.title || 'Content image'}
                       fill
                       className="object-cover"
