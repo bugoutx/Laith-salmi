@@ -11,7 +11,7 @@ export default function SocialProofSection() {
     {
       id: 'experience',
       title: 'خبرة عملية',
-      years: '+6Y',
+      years: '+7Y',
       content: 'في تحليل الأسواق المالية والتداول في المعادن',
       accent: 'line'
     },
@@ -41,7 +41,7 @@ export default function SocialProofSection() {
   const expertiseAreas = [
     'تحليل أسواق',
     'إدارة محافظ', 
-    'أسواق المعادن',
+    'سوق المعادن',
     'إدارة المخاطر'
   ];
 

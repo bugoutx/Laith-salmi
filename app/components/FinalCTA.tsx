@@ -86,7 +86,7 @@ export default function FinalCTA() {
             className="text-xl text-zinc-300 max-w-3xl mx-auto leading-relaxed"
             dir="rtl"
           >
-            اكتسب المهارات الحقيقية في تحليل أسواق المعادن، وابنِ قراراتك الاستثمارية بوضوح وثقة
+            اكتسب المهارات الحقيقية في تحليل الأسواق المالية، وابنِ قراراتك الاستثمارية بوضوح وثقة
           </motion.p>
 
           {/* Value propositions */}
@@ -106,7 +106,7 @@ export default function FinalCTA() {
             </div>
             <div className="flex items-center gap-3 text-zinc-400" dir="rtl">
               <div className="w-2 h-2 bg-green-500 rounded-full" />
-              <span className="font-medium">خبرة +6 سنوات</span>
+              <span className="font-medium">خبرة +7 سنوات</span>
             </div>
           </motion.div>
 

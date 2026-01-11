@@ -316,6 +316,35 @@ export default function AboutPage() {
               </div>
             </motion.div>
 
+            {/* How I Read and Deal with the Market Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.55 }}
+              className="mb-16"
+            >
+              <div className="text-center mb-8">
+                <motion.h2
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 1.6 }}
+                  className="text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-50 mb-6"
+                  dir="rtl"
+                >
+                  كيف أقرأ وأتعامل مع السوق
+                </motion.h2>
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 1.7 }}
+                  className="text-xl sm:text-2xl lg:text-3xl font-semibold text-green-400"
+                  dir="rtl"
+                >
+                  من الصورة الكبيرة → التحليل → قرار المتاجرة
+                </motion.p>
+              </div>
+            </motion.div>
+
             {/* Video Section */}
             <VideoSection />
 
