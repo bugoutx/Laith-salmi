@@ -900,38 +900,13 @@ export default function AdminPanel() {
 
                       <div>
                         <label className="block text-sm font-medium text-zinc-300 mb-2">
-                          العنوان الرئيسي
+                          العنوان
                         </label>
                         <input
                           type="text"
                           value={contentFormData.title || ''}
                           onChange={(e) => setContentFormData({ ...contentFormData, title: e.target.value })}
                           className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-zinc-50 focus:outline-none focus:border-green-500"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-zinc-300 mb-2">
-                          العنوان الفرعي
-                        </label>
-                        <input
-                          type="text"
-                          value={contentFormData.subtitle || ''}
-                          onChange={(e) => setContentFormData({ ...contentFormData, subtitle: e.target.value })}
-                          className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-zinc-50 focus:outline-none focus:border-green-500"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-zinc-300 mb-2">
-                          النص العلوي (Eyebrow)
-                        </label>
-                        <input
-                          type="text"
-                          value={contentFormData.eyebrow || ''}
-                          onChange={(e) => setContentFormData({ ...contentFormData, eyebrow: e.target.value })}
-                          className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-lg text-zinc-50 focus:outline-none focus:border-green-500"
-                          placeholder="مثال: منهجية • فلسفة • انضباط"
                         />
                       </div>
 

@@ -104,7 +104,7 @@ export default function Hero() {
                   transition={{ duration: 0.8, delay: 0.6 }}
                   className="text-xs sm:text-sm font-light text-zinc-300 leading-relaxed mb-2 px-3"
                 >
-                  أؤمن أن الأسواق بطبيعتها متطورة، وأن علم فهمها لا يقف عند حد، لذلك أحرص دائماً على التطور المستمر ومن يكون إلى جانبي في هذا المسار يواكب هذا التطور بوعي وانتقاء خالياً من الإزعاج.
+                  أؤمن أن الأسواق بطبيعتها متطورة، وأن علم فهمها لا يقف عند حد، لذلك أحرص دائماً على التطور المستمر ومن يكون إلى جانبي في هذا المسار يواكب هذا التطور بوعي وانتقاء خالياً من الضجيج.
                 </motion.blockquote>
 
                 {/* Closing quote mark */}
@@ -152,12 +152,10 @@ export default function Hero() {
                 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-zinc-50"
                 dir="rtl"
               >
-                قراءة السوق ليست توقعًا
-                <br className="hidden sm:block" />
-                <span className="sm:hidden"> </span>
+                البساطة ليست قلة معرفة،
+                <br />
                 بل{' '}
-                <span className="text-green-500">فهمًا</span>{' '}
-                للسلوك
+                <span className="text-green-500">نضج في اتخاذ القرار</span>
               </motion.h1>
 
               {/* Subheadline */}
@@ -168,7 +166,9 @@ export default function Hero() {
                 className="text-base sm:text-lg md:text-xl leading-relaxed text-zinc-300"
                 dir="rtl"
               >
-                التحليل الفني للمستثمرين، التجار، المضاربين، بما في ذلك صناديق التحوط، صناديق الاستثمار المشتركة، المستشارين الماليين والناس العاديين
+                منهجية التداول مع الاتجاه
+          
+                لبناء مشروع تداول بعيدًا عن الضجيج
               </motion.p>
 
               {/* Trust indicators */}
@@ -250,7 +250,7 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 1.8 }}
             className="text-xs sm:text-sm font-light text-zinc-300 leading-relaxed mb-2 px-3"
           >
-            أؤمن أن الأسواق بطبيعتها متطورة، وأن علم فهمها لا يقف عند حد، لذلك أحرص دائماً على التطور المستمر ومن يكون إلى جانبي في هذا المسار يواكب هذا التطور بوعي وانتقاء خالياً من الإزعاج.
+            أؤمن أن الأسواق بطبيعتها متطورة، وأن علم فهمها لا يقف عند حد، لذلك أحرص دائماً على التطور المستمر ومن يكون إلى جانبي في هذا المسار يواكب هذا التطور بوعي وانتقاء خالياً من الضجيج.
           </motion.blockquote>
 
           {/* Closing quote mark */}

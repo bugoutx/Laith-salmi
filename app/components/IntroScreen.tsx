@@ -135,7 +135,7 @@ export default function IntroScreen() {
                 transition={{ duration: 0.8, delay: 0.6 }}
                 className="block"
               >
-                ابقَ بعيدًا عن الإزعاج
+                ابقَ بعيدًا عن الضجيج
               </motion.span>
               <motion.span
                 initial={{ opacity: 0 }}

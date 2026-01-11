@@ -73,7 +73,7 @@ export default function FinalCTA() {
             className="text-4xl sm:text-5xl lg:text-6xl font-bold text-zinc-50 leading-tight"
             dir="rtl"
           >
-            ابقَ بعيدًا عن الإزعاج
+            ابقَ بعيدًا عن الضجيج
             <br />
             <span className="text-green-500">مع ليث السالمي</span>
           </motion.h2>
@@ -164,7 +164,7 @@ export default function FinalCTA() {
             <p className="text-sm text-zinc-500 mb-4">معتمد من الاتحاد الدولي للمحللين الفنيين</p>
             <div className="flex justify-center items-center gap-2">
               <div className="px-4 py-2 bg-zinc-800/30 rounded-lg border border-zinc-700/30">
-                <span className="text-xs font-medium text-zinc-400">CFTe I Certified</span>
+                <span className="text-xs font-medium text-zinc-400">CFTe</span>
               </div>
               <div className="px-4 py-2 bg-zinc-800/30 rounded-lg border border-zinc-700/30">
                 <span className="text-xs font-medium text-zinc-400">IFTA Member</span>
