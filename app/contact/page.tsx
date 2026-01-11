@@ -49,26 +49,26 @@ export default function ContactPage() {
     {
       icon: '📧',
       title: 'البريد الإلكتروني',
-      value: 'laith@example.com',
-      link: 'mailto:laith@example.com'
+      value: 'Laithsalmi555@gmail.com',
+      link: 'mailto:Laithsalmi555@gmail.com'
     },
     {
       icon: '📱',
       title: 'واتساب',
-      value: '+966 50 123 4567',
-      link: 'https://wa.me/966501234567'
+      value: '+968 92272122',
+      link: 'https://wa.me/96892272122'
+    },
+    {
+      icon: '📷',
+      title: 'إنستغرام',
+      value: 'laith_finance',
+      link: 'https://www.instagram.com/laith_finance?igsh=MXMzdW94d2xjNHR0ZQ%3D%3D&utm_source=qr'
     },
     {
       icon: '💼',
       title: 'لينكد إن',
-      value: 'Laith Al Salmi',
-      link: 'https://linkedin.com/in/laith-al-salmi'
-    },
-    {
-      icon: '🕒',
-      title: 'ساعات العمل',
-      value: 'الأحد - الخميس: 9:00 - 18:00',
-      link: null
+      value: 'Laith Al Salmi - CFTe',
+      link: 'https://www.linkedin.com/in/laith-alsalmi-cfte-470a1b324?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app'
     }
   ];
 
@@ -346,7 +346,8 @@ export default function ContactPage() {
                               href={info.link}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-zinc-50 hover:text-green-400 transition-colors font-medium"
+                              className={`text-zinc-50 hover:text-green-400 transition-colors font-medium ${info.title === 'واتساب' ? 'ltr' : ''}`}
+                              dir={info.title === 'واتساب' ? 'ltr' : 'auto'}
                             >
                               {info.value}
                             </a>

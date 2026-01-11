@@ -153,24 +153,6 @@ export default function FinalCTA() {
               تعرّف على الخدمات
             </motion.button>
           </motion.div>
-
-          {/* Trust indicators */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-            className="pt-8 border-t border-zinc-800/50"
-          >
-            <p className="text-sm text-zinc-500 mb-4">معتمد من الاتحاد الدولي للمحللين الفنيين</p>
-            <div className="flex justify-center items-center gap-2">
-              <div className="px-4 py-2 bg-zinc-800/30 rounded-lg border border-zinc-700/30">
-                <span className="text-xs font-medium text-zinc-400">CFTe</span>
-              </div>
-              <div className="px-4 py-2 bg-zinc-800/30 rounded-lg border border-zinc-700/30">
-                <span className="text-xs font-medium text-zinc-400">IFTA Member</span>
-              </div>
-            </div>
-          </motion.div>
         </motion.div>
       </div>
 
