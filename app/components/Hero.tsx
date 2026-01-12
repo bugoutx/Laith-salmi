@@ -53,87 +53,156 @@ export default function Hero() {
       <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black via-black/60 to-transparent z-25 pointer-events-none" />
 
       {/* 5. Main content layer - Highest layer */}
-      <div className="relative z-30 flex min-h-screen items-center px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 lg:pt-0">
+      <div className="relative z-30 flex min-h-screen items-center px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 lg:pt-0">
         <div className="w-full lg:w-1/2 lg:me-auto max-w-3xl">
           <div className="w-full flex flex-col">
             
-            {/* Mobile Image - First on mobile, hidden on desktop */}
-            <div className="lg:hidden relative z-20 w-full mb-8 order-1">
+            {/* Mobile Layout - Completely redesigned for mobile appeal */}
+            <div className="lg:hidden w-full">
+              {/* Mobile Hero Content - Centered and prominent */}
+              <div className="text-center space-y-6 mb-8">
+                {/* Eyebrow text - smaller and centered */}
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="text-xs font-medium tracking-wide text-zinc-400 uppercase"
+                >
+                  Technical Analysis • CFTe
+                </motion.p>
+
+                {/* Main headline - optimized for mobile */}
+                <motion.h1
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className="text-2xl sm:text-3xl font-bold leading-tight text-zinc-50 px-2"
+                  dir="rtl"
+                >
+                  البساطة ليست قلة معرفة،
+                  <br />
+                  بل{' '}
+                  <span className="text-green-500">نضج في اتخاذ القرار</span>
+                </motion.h1>
+
+                {/* Subheadline - more compact */}
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.6 }}
+                  className="text-sm sm:text-base leading-relaxed text-zinc-300 px-4"
+                  dir="rtl"
+                >
+                  منهجية التداول مع الاتجاه لبناء مشروع تداول بعيدًا عن الضجيج
+                </motion.p>
+              </div>
+
+              {/* Mobile Image - Circular profile style with enhanced design */}
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="relative w-full h-80 sm:h-96 rounded-2xl overflow-hidden bg-gradient-radial from-zinc-900 via-zinc-950 to-black"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+                className="relative w-full mb-8 flex justify-center"
               >
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10" />
+                <div className="relative">
+                  {/* Outer glow ring */}
+                  <div className="absolute -inset-4 bg-gradient-to-r from-green-500/20 via-green-400/10 to-green-500/20 rounded-full blur-xl"></div>
+                  
+                  {/* Main image container */}
+                  <div className="relative w-64 h-64 sm:w-72 sm:h-72 rounded-full overflow-hidden bg-gradient-radial from-zinc-800 via-zinc-900 to-black border-2 border-green-500/30">
+                    {/* Inner gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
+                    
+                    {/* The actual image */}
+                    <Image
+                      src="/laith2.png"
+                      alt="Laith Salmi - Technical Analyst"
+                      fill
+                      className="object-cover object-center scale-110"
+                      priority
+                    />
+                  </div>
+                  
+                  {/* Floating badge */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.6, delay: 1.0 }}
+                    className="absolute -bottom-2 -right-2 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full border-2 border-zinc-900 shadow-lg"
+                  >
+                    CFTe
+                  </motion.div>
+                </div>
+              </motion.div>
+
+              {/* Mobile Trust indicators - Redesigned as cards */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.2 }}
+                className="grid grid-cols-2 gap-3 mb-8"
+              >
+                <div className="bg-zinc-900/60 backdrop-blur-sm border border-zinc-800/50 rounded-lg p-3 text-center">
+                  <div className="text-green-400 font-bold text-lg">+7</div>
+                  <div className="text-zinc-300 text-xs">سنوات خبرة</div>
+                </div>
+                <div className="bg-zinc-900/60 backdrop-blur-sm border border-zinc-800/50 rounded-lg p-3 text-center">
+                  <div className="text-green-400 font-bold text-lg">CFTe</div>
+                  <div className="text-zinc-300 text-xs">محلل معتمد</div>
+                </div>
+              </motion.div>
+
+              {/* Mobile Quote - Compact and elegant */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1.4 }}
+                className="relative bg-zinc-900/40 backdrop-blur-sm border border-zinc-800/30 rounded-xl p-4 mb-8 text-center"
+                dir="rtl"
+              >
+                <div className="text-2xl text-green-500/40 mb-2">"</div>
+                <blockquote className="text-sm text-zinc-300 leading-relaxed mb-3 italic">
+                  أؤمن أن الأسواق بطبيعتها متطورة، وأن علم فهمها لا يقف عند حد
+                </blockquote>
+                <div className="w-8 h-px bg-gradient-to-r from-transparent via-green-500/50 to-transparent mx-auto mb-2" />
+                <p className="text-xs text-zinc-400 font-medium">— ليث السالمي</p>
+              </motion.div>
+
+              {/* Mobile CTA buttons - Enhanced design */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.6 }}
+                className="space-y-3"
+              >
+                {/* Primary CTA */}
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-green-500/25 text-base relative overflow-hidden"
+                >
+                  <motion.div
+                    className="absolute inset-0 bg-white/10"
+                    initial={{ x: '-100%' }}
+                    whileHover={{ x: '100%' }}
+                    transition={{ duration: 0.6 }}
+                  />
+                  <span className="relative z-10">ابدأ من هنا</span>
+                </motion.button>
                 
-                {/* The actual image */}
-                <Image
-                  src="/laith2.png"
-                  alt="Laith Salmi - Technical Analyst"
-                  fill
-                  className="object-cover object-center"
-                  priority
-                />
+                {/* Secondary CTA */}
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full px-8 py-4 border-2 border-zinc-700 hover:border-green-500/50 bg-zinc-900/50 hover:bg-zinc-800/50 text-zinc-300 hover:text-green-400 font-semibold rounded-xl transition-all duration-300 text-base"
+                >
+                  استكشف الخدمات
+                </motion.button>
               </motion.div>
             </div>
-
-            {/* Mobile Quote - After image on mobile, hidden on desktop */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="lg:hidden relative z-20 w-full mb-8 order-2"
-            >
-              <div className="relative bg-zinc-900/60 backdrop-blur-sm border border-zinc-800/50 rounded-lg p-3 sm:p-4 text-center" dir="rtl">
-                {/* Quote mark */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 0.5 }}
-                  className="absolute -top-1 -right-2 text-xl text-green-500/30 font-serif leading-none"
-                >
-                  "
-                </motion.div>
-
-                {/* Quote text */}
-                <motion.blockquote
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.8, delay: 0.6 }}
-                  className="text-xs sm:text-sm font-light text-zinc-300 leading-relaxed mb-2 px-3"
-                >
-                  أؤمن أن الأسواق بطبيعتها متطورة، وأن علم فهمها لا يقف عند حد، لذلك أحرص دائماً على التطور المستمر ومن يكون إلى جانبي في هذا المسار يواكب هذا التطور بوعي وانتقاء خالياً من الضجيج.
-                </motion.blockquote>
-
-                {/* Closing quote mark */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 0.7 }}
-                  className="absolute -bottom-1 -left-2 text-xl text-green-500/30 font-serif leading-none transform rotate-180"
-                >
-                  "
-                </motion.div>
-
-                {/* Attribution */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.6, delay: 0.8 }}
-                  className="mt-1"
-                >
-                  <div className="w-6 h-px bg-gradient-to-r from-transparent via-green-500/50 to-transparent mx-auto mb-1" />
-                  <p className="text-[10px] sm:text-xs text-zinc-400 font-medium">
-                    — ليث السالمي
-                  </p>
-                </motion.div>
-              </div>
-            </motion.div>
             
-            {/* Content Side - Right side (opposite of image on desktop), order-3 on mobile */}
-            <div className="text-right space-y-6 sm:space-y-8 lg:pr-12 relative z-30 order-3 lg:order-1">
+            {/* Desktop Content - Unchanged */}
+            <div className="hidden lg:block text-right space-y-6 sm:space-y-8 lg:pr-12 relative z-30">
               {/* Eyebrow text */}
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
@@ -167,7 +236,6 @@ export default function Hero() {
                 dir="rtl"
               >
                 منهجية التداول مع الاتجاه
-          
                 لبناء مشروع تداول بعيدًا عن الضجيج
               </motion.p>
 
@@ -186,7 +254,7 @@ export default function Hero() {
                 <div className="hidden sm:block w-px h-4 bg-zinc-600" />
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0" />
-                  <span className="font-medium whitespace-nowrap">+6 Years Experience</span>
+                  <span className="font-medium whitespace-nowrap">+7 Years Experience</span>
                 </div>
                 <div className="hidden sm:block w-px h-4 bg-zinc-600" />
                 <div className="flex items-center gap-2">

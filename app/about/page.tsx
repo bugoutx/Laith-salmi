@@ -93,7 +93,7 @@ export default function AboutPage() {
                     <span className="text-green-400 font-medium text-sm">CFTe</span>
                   </div>
                   <div className="px-4 py-2 bg-zinc-800/50 border border-zinc-700/30 rounded-lg">
-                    <span className="text-zinc-300 font-medium text-sm">+6 سنوات خبرة</span>
+                    <span className="text-zinc-300 font-medium text-sm">+7 سنوات خبرة</span>
                   </div>
                 </div>
               </motion.div>
@@ -301,7 +301,7 @@ export default function AboutPage() {
               className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
             >
               <div className="p-6 rounded-xl bg-zinc-900/40 backdrop-blur-sm border border-zinc-800/50 text-center">
-                <div className="text-3xl font-bold text-green-400 mb-2">+6</div>
+                <div className="text-3xl font-bold text-green-400 mb-2">+7</div>
                 <div className="text-zinc-300 font-medium" dir="rtl">سنوات خبرة</div>
               </div>
               
@@ -340,7 +340,7 @@ export default function AboutPage() {
                   className="text-xl sm:text-2xl lg:text-3xl font-semibold text-green-400"
                   dir="rtl"
                 >
-                  من الصورة الكبيرة → التحليل → قرار المتاجرة
+                  من الصورة الكبيرة ← التحليل ← قرار المتاجرة
                 </motion.p>
               </div>
             </motion.div>
@@ -357,7 +357,7 @@ export default function AboutPage() {
             >
               <blockquote className="text-xl sm:text-2xl font-light text-zinc-300 leading-relaxed max-w-4xl mx-auto" dir="rtl">
                 "أؤمن أن الأسواق بطبيعتها متغيّرة، وأن علم فهمها لا يقف عند حد، 
-                لذلك أحرص على التطوّر المستمر، ومن يكون إلى جانبي في هذا المسار 
+                لذلك أحرص على التطوّر المستمر، ومن يكون بجانبي في هذا المسار 
                 يواكب هذا التطوّر بوعي وانتقاء."
               </blockquote>
               <div className="mt-6">

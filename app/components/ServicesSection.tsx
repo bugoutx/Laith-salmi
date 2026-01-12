@@ -121,7 +121,7 @@ export default function ServicesSection() {
             className="text-lg text-zinc-400 max-w-3xl mx-auto leading-relaxed"
             dir="rtl"
           >
-            أربع خدمات أساسية مصممة لبناء مهاراتك وتطوير فهمك العميق لأسواق المعادن
+            من الفهم … إلى التعلم  …إلى التطبيق… إلى كسب المال والاستمرارية
           </motion.p>
         </motion.div>
 

@@ -279,13 +279,15 @@ export default function VideoSection() {
                       }}
                       onMouseEnter={() => setIsAutoPlayPaused(true)} // Pause on hover
                       onMouseLeave={() => setIsAutoPlayPaused(false)} // Resume on leave
-                      className={`h-2 rounded-full transition-all duration-300 ${
+                      className={`px-3 py-1 rounded-lg transition-all duration-300 text-sm font-medium ${
                         index === activeItemIndex 
-                          ? 'w-8 bg-green-500' 
-                          : 'w-2 bg-zinc-600 hover:bg-zinc-500'
+                          ? 'bg-green-500 text-white' 
+                          : 'bg-zinc-800/50 text-zinc-400 hover:bg-zinc-700/50 hover:text-zinc-300'
                       }`}
                       aria-label={`Go to item ${index + 1}`}
-                    />
+                    >
+                      {index + 1}
+                    </button>
                   ))}
                 </div>
               )}
@@ -361,13 +363,15 @@ export default function VideoSection() {
                       setCurrentTime(0);
                       setIsAutoPlayPaused(true);
                     }}
-                    className={`h-2 rounded-full transition-all duration-300 ${
+                    className={`px-3 py-1 rounded-lg transition-all duration-300 text-sm font-medium ${
                       index === activeItemIndex 
-                        ? 'w-8 bg-green-500' 
-                        : 'w-2 bg-zinc-600 hover:bg-zinc-500'
+                        ? 'bg-green-500 text-white' 
+                        : 'bg-zinc-800/50 text-zinc-400 hover:bg-zinc-700/50 hover:text-zinc-300'
                     }`}
                     aria-label={`Go to item ${index + 1}`}
-                  />
+                  >
+                    {index + 1}
+                  </button>
                 ))}
               </div>
             )}
