@@ -68,7 +68,7 @@ export default function Hero() {
                   transition={{ duration: 0.6, delay: 0.2 }}
                   className="text-xs font-medium tracking-wide text-zinc-400 uppercase"
                 >
-                  Technical Analysis • CFTe
+                  Technical Analysis
                 </motion.p>
 
                 {/* Main headline - optimized for mobile */}
@@ -114,13 +114,16 @@ export default function Hero() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
                     
                     {/* The actual image */}
-                    <Image
-                      src="/laith2.png"
-                      alt="Laith Salmi - Technical Analyst"
-                      fill
-                      className="object-cover object-center scale-110"
-                      priority
-                    />
+                    <div className="absolute inset-0" style={{ transform: 'translateX(-8px)' }}>
+                      <Image
+                        src="/laith2.png"
+                        alt="Laith Salmi - Technical Analyst"
+                        fill
+                        className="object-cover"
+                        style={{ objectPosition: 'center center' }}
+                        priority
+                      />
+                    </div>
                   </div>
                   
                   {/* Floating badge */}
@@ -130,7 +133,7 @@ export default function Hero() {
                     transition={{ duration: 0.6, delay: 1.0 }}
                     className="absolute -bottom-2 -right-2 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full border-2 border-zinc-900 shadow-lg"
                   >
-                    CFTe
+                    CFT I
                   </motion.div>
                 </div>
               </motion.div>
@@ -147,8 +150,8 @@ export default function Hero() {
                   <div className="text-zinc-300 text-xs">سنوات خبرة</div>
                 </div>
                 <div className="bg-zinc-900/60 backdrop-blur-sm border border-zinc-800/50 rounded-lg p-3 text-center">
-                  <div className="text-green-400 font-bold text-lg">CFTe</div>
-                  <div className="text-zinc-300 text-xs">محلل معتمد</div>
+                  <div className="text-green-400 font-bold text-lg">CFT I</div>
+                  <div className="text-zinc-300 text-xs">فني مالي معتمد</div>
                 </div>
               </motion.div>
 
@@ -162,7 +165,7 @@ export default function Hero() {
               >
                 <div className="text-2xl text-green-500/40 mb-2">"</div>
                 <blockquote className="text-sm text-zinc-300 leading-relaxed mb-3 italic">
-                  أؤمن أن الأسواق بطبيعتها متطورة، وأن علم فهمها لا يقف عند حد
+                  أؤمن أن الأسواق بطبيعتها متطورة، وأن علم فهمها لا يقف عند حد، لذلك أحرص دائماً على التطور المستمر ومن يكون إلى جانبي في هذا المسار يواكب هذا التطور بوعي وانتقاء خالياً من الضجيج.
                 </blockquote>
                 <div className="w-8 h-px bg-gradient-to-r from-transparent via-green-500/50 to-transparent mx-auto mb-2" />
                 <p className="text-xs text-zinc-400 font-medium">— ليث السالمي</p>
