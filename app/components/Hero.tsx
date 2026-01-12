@@ -133,7 +133,7 @@ export default function Hero() {
                     transition={{ duration: 0.6, delay: 1.0 }}
                     className="absolute -bottom-2 -right-2 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full border-2 border-zinc-900 shadow-lg"
                   >
-                    CFT I
+                    CFTe I
                   </motion.div>
                 </div>
               </motion.div>
@@ -150,7 +150,7 @@ export default function Hero() {
                   <div className="text-zinc-300 text-xs">سنوات خبرة</div>
                 </div>
                 <div className="bg-zinc-900/60 backdrop-blur-sm border border-zinc-800/50 rounded-lg p-3 text-center">
-                  <div className="text-green-400 font-bold text-lg">CFT I</div>
+                  <div className="text-green-400 font-bold text-lg">CFTe I</div>
                   <div className="text-zinc-300 text-xs">فني مالي معتمد</div>
                 </div>
               </motion.div>
