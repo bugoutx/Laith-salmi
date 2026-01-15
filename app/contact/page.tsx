@@ -19,10 +19,23 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitStatus('idle');
     
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'حدث خطأ أثناء الإرسال');
+      }
+
       setSubmitStatus('success');
       setFormData({
         name: '',
@@ -35,7 +48,14 @@ export default function ContactPage() {
       
       // Reset success message after 5 seconds
       setTimeout(() => setSubmitStatus('idle'), 5000);
-    }, 2000);
+    } catch (error: any) {
+      console.error('Form submission error:', error);
+      setSubmitStatus('error');
+      // Reset error message after 5 seconds
+      setTimeout(() => setSubmitStatus('idle'), 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -190,6 +210,18 @@ export default function ContactPage() {
                       >
                         <p className="text-green-400 text-center" dir="rtl">
                           تم إرسال رسالتك بنجاح! سأتواصل معك قريباً.
+                        </p>
+                      </motion.div>
+                    )}
+
+                    {submitStatus === 'error' && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-6 p-4 bg-red-500/20 border border-red-500/30 rounded-lg"
+                      >
+                        <p className="text-red-400 text-center" dir="rtl">
+                          حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة مرة أخرى.
                         </p>
                       </motion.div>
                     )}
