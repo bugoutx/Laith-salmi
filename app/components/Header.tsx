@@ -189,7 +189,8 @@ export default function Header() {
 
               {/* CTA Button in Menu */}
               <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-zinc-800">
-                <motion.button
+                  <Link href="/contact" tabIndex={-1}>
+                  <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -200,6 +201,7 @@ export default function Header() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
                 </motion.button>
+                </Link>
               </div>
             </motion.div>
           </>

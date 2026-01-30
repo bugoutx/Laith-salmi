@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
+import Link from 'next/link';
 import { useRef } from 'react';
 
 export default function MethodologySection() {
@@ -198,6 +199,7 @@ export default function MethodologySection() {
           transition={{ duration: 0.8, delay: 1.8 }}
           className="text-center mt-16"
         >
+          <Link href="/contact" tabIndex={-1}>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -211,6 +213,7 @@ export default function MethodologySection() {
             />
             <span className="relative z-10">ابدأ المنهجية الآن</span>
           </motion.button>
+          </Link>
         </motion.div>
       </div>
     </section>
