@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
+import Link from 'next/link';
 import { useRef } from 'react';
 
 export default function FinalCTA() {
@@ -118,6 +119,7 @@ export default function FinalCTA() {
             className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-4"
           >
             {/* Primary CTA */}
+            <Link href="/contact" tabIndex={-1}>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -143,8 +145,9 @@ export default function FinalCTA() {
                 </motion.svg>
               </span>
             </motion.button>
-
+            </Link>
             {/* Secondary CTA */}
+            <Link href="/services" tabIndex={-1}>
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -152,6 +155,7 @@ export default function FinalCTA() {
             >
               تعرّف على الخدمات
             </motion.button>
+            </Link>
           </motion.div>
         </motion.div>
       </div>

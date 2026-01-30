@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Header from '../components/Header';
 import VideoSection from '../components/VideoSection';
+import Link from 'next/link';
 
 export default function AboutPage() {
   return (
@@ -373,6 +374,7 @@ export default function AboutPage() {
               transition={{ duration: 0.8, delay: 1.7 }}
               className="text-center"
             >
+              <Link href="/contact" tabIndex={-1}>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -380,6 +382,7 @@ export default function AboutPage() {
               >
                 ابدأ رحلتك معي
               </motion.button>
+              </Link>
             </motion.div>
           </div>
         </section>

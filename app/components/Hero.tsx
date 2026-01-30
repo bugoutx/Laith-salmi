@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { CandleBackground } from './CandleBackground';
+import Link from 'next/link';
 
 export default function Hero() {
   return (
@@ -179,6 +180,7 @@ export default function Hero() {
                 className="space-y-3"
               >
                 {/* Primary CTA */}
+                <Link href="/contact" tabIndex={-1}>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -192,8 +194,9 @@ export default function Hero() {
                   />
                   <span className="relative z-10">ابدأ من هنا</span>
                 </motion.button>
-                
+                </Link>
                 {/* Secondary CTA */}
+                <Link href="/services" tabIndex={-1}>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -201,6 +204,7 @@ export default function Hero() {
                 >
                   استكشف الخدمات
                 </motion.button>
+                </Link>
               </motion.div>
             </div>
             
@@ -274,6 +278,7 @@ export default function Hero() {
                 className="flex flex-col sm:flex-row gap-3 sm:gap-4"
               >
                 {/* Primary CTA */}
+               < Link href="/contact" tabIndex={-1}>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -281,15 +286,17 @@ export default function Hero() {
                 >
                   ابدأ من هنا
                 </motion.button>
-                
+                </Link>
                 {/* Secondary CTA */}
-                <motion.button
+                <Link href="/services" tabIndex={-1}>
+                <motion.button  
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 border-2 border-zinc-600 hover:border-green-500 text-zinc-300 hover:text-green-400 font-semibold rounded-lg transition-all duration-300 text-sm sm:text-base"
                 >
                   الخدمات
                 </motion.button>
+                </Link>
               </motion.div>
             </div>
           </div>

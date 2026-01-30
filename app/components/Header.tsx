@@ -85,16 +85,18 @@ export default function Header() {
           {/* Left side actions - CTA buttons */}
           <div className="flex items-center gap-4">
             {/* Start Challenge Button - Hidden on mobile */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="hidden sm:flex bg-green-500 hover:bg-green-600 text-black font-semibold px-4 py-2 rounded-lg transition-all duration-300 items-center gap-2 shadow-lg shadow-green-500/25"
-            >
-              <span>ابدأ من هنا</span>
-              <svg className="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </motion.button>
+            <Link href="/contact" tabIndex={-1} className="hidden sm:flex">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-green-500 hover:bg-green-600 text-black font-semibold px-4 py-2 rounded-lg transition-all duration-300 items-center gap-2 shadow-lg shadow-green-500/25 flex"
+              >
+                <span>ابدأ من هنا</span>
+                <svg className="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </motion.button>
+            </Link>
 
             {/* Mobile menu button */}
             <button

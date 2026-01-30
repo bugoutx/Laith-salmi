@@ -262,21 +262,31 @@ export default function ServicesPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.4 }}
-              className="text-center mt-16"
+              className="text-center mt-16 flex flex-col items-center gap-6"
             >
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-12 py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-green-500/25 relative overflow-hidden"
+              {/* Primary CTA */}
+              <a href="/contact" tabIndex={-1}>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-12 py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-green-500/25 relative overflow-hidden"
+                >
+                  <motion.div
+                    className="absolute inset-0 bg-white/20"
+                    initial={{ x: '-100%' }}
+                    whileHover={{ x: '100%' }}
+                    transition={{ duration: 0.6 }}
+                  />
+                  <span className="relative z-10">ابدأ رحلتك معي</span>
+                </motion.button>
+              </a>
+              {/* Secondary CTA link */}
+              <a
+                href="/about"
+                className="inline-block px-10 py-4 border-2 border-zinc-600 hover:border-green-500 text-zinc-300 hover:text-green-400 font-semibold text-base rounded-xl transition-all duration-300 hover:bg-green-500/5"
               >
-                <motion.div
-                  className="absolute inset-0 bg-white/20"
-                  initial={{ x: '-100%' }}
-                  whileHover={{ x: '100%' }}
-                  transition={{ duration: 0.6 }}
-                />
-                <span className="relative z-10">ابدأ رحلتك معي</span>
-              </motion.button>
+                تعرّف عليّ أكثر
+              </a>
             </motion.div>
           </div>
         </section>

@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
+import Link from 'next/link';
 import { useRef, useState, useEffect } from 'react';
 
 interface Service {
@@ -262,7 +263,8 @@ export default function ServicesSection() {
           transition={{ duration: 0.8, delay: 1.4 }}
           className="text-center mt-12"
         >
-          <motion.button
+          <Link href="/contact" tabIndex={-1}>
+            <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="px-12 py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-green-500/25 relative overflow-hidden"
@@ -275,6 +277,7 @@ export default function ServicesSection() {
             />
             <span className="relative z-10">ابدأ رحلتك معي</span>
           </motion.button>
+          </Link>
         </motion.div>
       </div>
     </section>
