@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import WhatsAppFAB from "./components/WhatsAppFAB";
 
 export const metadata: Metadata = {
   title: "ليث السالمي - محلل فني معتمد",
@@ -16,7 +15,6 @@ export default function RootLayout({
     <html lang="ar" dir="rtl" className="dark" suppressHydrationWarning>
       <body className="antialiased">
         {children}
-        <WhatsAppFAB />
       </body>
     </html>
   );

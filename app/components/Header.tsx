@@ -38,7 +38,7 @@ export default function Header() {
     { href: '/about', label: 'من أنا' },
     { href: '/services', label: 'خدماتي' },
     { href: '/blog', label: 'المدونة' },
-    { href: '/contact', label: 'اتصل بنا' },
+    { href: '/contact', label: 'تواصل معي' },
   ];
 
   return (
